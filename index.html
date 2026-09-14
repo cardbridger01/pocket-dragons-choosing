@@ -55,10 +55,11 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
 .eggmini small{display:block;color:#afb7c0;font-size:11px}
 .score-mask{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
 .scores{display:grid;gap:8px;margin-top:13px}
-.score{display:grid;grid-template-columns:65px 1fr 34px;gap:7px;align-items:center;font-size:10px}
+.score{display:grid;grid-template-columns:72px 1fr;gap:9px;align-items:center;font-size:10px}
 .score .line{height:5px;background:#303b49;border-radius:8px;overflow:hidden}
 .score i{display:block;height:100%;background:#e0a753;width:0;transition:.3s}
-.score b{font-weight:500;color:#bec4ca;text-align:right}
+.score.top span{color:#ffcf7e;font-weight:600}
+.score.top i{background:linear-gradient(90deg,#dd772f,#ffd27c)}
 .tip{color:#9da7b5!important;font-size:11px!important;margin-top:12px!important}
 .result{display:none}
 .result.show{display:block}
@@ -145,7 +146,7 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
         <div class="eyebrow">Resonance</div>
         <p class="score-mask" id="scoreMask">Your resonance is sealed.<br>Make your final choice to reveal the eggs listening most closely.</p>
         <div class="scores hidden" id="scores"></div>
-        <p class="tip">Your alignment stays concealed until the choosing is complete.</p>
+        <p class="tip" id="tip">Your alignment stays concealed until the choosing is complete.</p>
       </div>
     </aside>
   </div>
@@ -422,6 +423,7 @@ const playEl = $('#play'), resultEl = $('#result'), eggminiEl = $('#eggmini');
 const EGG_CARD_PRISTINE = {
   title: $('#eggCardTitle').textContent,
   body:  $('#eggCardBody').textContent,
+  tip:   $('#tip').textContent,
   mini:  '<img src="Pocket_Dragons_Egg_cracking.webp" alt="A dragon egg beginning to crack">' +
          '<div><b>Unrevealed</b><small>Alignment forming</small></div>'
 };
@@ -501,6 +503,7 @@ function reset() {
   $('#scores').innerHTML = '';
   $('#eggCardTitle').textContent = EGG_CARD_PRISTINE.title;
   $('#eggCardBody').textContent  = EGG_CARD_PRISTINE.body;
+  $('#tip').textContent = EGG_CARD_PRISTINE.tip;
   eggminiEl.innerHTML = EGG_CARD_PRISTINE.mini;
   render();
 }
@@ -599,14 +602,20 @@ function reveal() {
   $('#scoreMask').classList.add('hidden');
   $('#scores').classList.remove('hidden');
   const max = win.v || 1;
-  $('#scores').innerHTML = ranked.map(x =>
-    '<div class="score' + (x.v === 0 ? ' faint' : '') + '"><span>' + types[x.k].name + '</span>' +
+  /* No figures here. The cards already carry the only percentages in the reveal,
+     on a different basis (share of your top three). Printing a second scale beside
+     them made the same egg read as two different numbers. The bar length alone
+     says what this panel is for: how near every other egg came. */
+  $('#scores').innerHTML = ranked.map((x, i) =>
+    '<div class="score' + (i < 3 ? ' top' : '') + (x.v === 0 ? ' faint' : '') + '">' +
+    '<span>' + types[x.k].name + '</span>' +
     '<div class="line"><i style="width:' + Math.round(x.v / max * 100) + '%"></i></div>' +
-    '<b>' + Math.round(x.v / max * 100) + '</b></div>').join('');
+    '</div>').join('');
 
   setProgress(100, 'Affinity revealed');
   $('#eggCardTitle').textContent = 'Resonance revealed.';
-  $('#eggCardBody').textContent  = 'Every egg you touched, measured against the loudest.';
+  $('#eggCardBody').textContent  = 'Every egg that answered, set against the loudest of them.';
+  $('#tip').textContent = 'The three in gold are the ones above. The rest is how much of you went elsewhere.';
   eggminiEl.innerHTML =
     '<img src="' + types[win.k].img + '" alt="The ' + types[win.k].name + ' egg">' +
     '<div><b>' + types[win.k].name + '</b><small>your strongest</small></div>';
