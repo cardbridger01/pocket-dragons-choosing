@@ -1,4 +1,4 @@
-/* Pocket Dragons — QA harness.  Node 18+, `npm i jsdom`.  Run: node qa.js */
+/* Pocket Dragons QA harness.  Node 18+, `npm i jsdom`.  Run: node qa.js */
 const fs=require('fs'),path=require('path'),{JSDOM}=require('jsdom');
 const DIR=process.argv[2]||path.join(__dirname,'..');
 const HTML=fs.readFileSync(path.join(DIR,'index.html'),'utf8');
@@ -8,8 +8,8 @@ const ok=(c,m)=>{
   if(c){pass++;console.log('  PASS  '+m);}
   else{fail++;console.log('  FAIL  '+m);if(CI)console.log('::error::'+m);}
 };
-// Hygiene, not correctness. Reported loudly, but it does not break the build —
-// a stale file left in the repo is not the same as the page being wrong.
+// Hygiene, not correctness. Reported loudly, but it does not break the build.
+// A stale file left in the repo is not the same as the page being wrong.
 const warn=(c,m)=>{
   if(c){pass++;console.log('  PASS  '+m);}
   else{warnings.push(m);console.log('  WARN  '+m);if(CI)console.log('::warning::'+m);}
@@ -59,7 +59,7 @@ for(const k of keys){
 const onDisk=fs.readdirSync(DIR).filter(f=>/\.(webp|png|jpg|mp4)$/i.test(f));
 const orphan=onDisk.filter(f=>!assets.has(f)&&!HTML.includes(f));
 warn(!orphan.length, orphan.length
-  ? `${orphan.length} unreferenced media file(s) still in the repo — delete them to shrink the deploy: ${orphan.join(', ')}`
+  ? `${orphan.length} unreferenced media file(s) still in the repo. Delete them to shrink the deploy: ${orphan.join(', ')}`
   : 'no unreferenced media in deploy');
 
 /* ---------- 2. every path ---------- */
@@ -99,7 +99,7 @@ ok(keys.every(k=>feelFams.includes(k)),'every egg can be amplified by a feeling 
 ok(keys.every(k=>finFams.includes(k)),'every egg can be amplified by a final choice');
 
 /* ---------- 3. live DOM, played twice ---------- */
-head('Runtime — two consecutive playthroughs');
+head('Runtime: two consecutive playthroughs');
 const errs=[];
 const dom=new JSDOM(HTML,{runScripts:'dangerously',url:'http://localhost/',
   beforeParse(w){w.confirm=()=>true;w.onerror=(...a)=>errs.push(a.join(' '));}});
@@ -173,5 +173,5 @@ if(warnings.length){
   console.log('\nWarnings (these do NOT fail the build):');
   warnings.forEach(w=>console.log('  · '+w));
 }
-if(fail) console.log('\nThe page itself is broken — fix before deploying.');
+if(fail) console.log('\nThe page itself is broken. Fix before deploying.');
 process.exit(fail?1:0);

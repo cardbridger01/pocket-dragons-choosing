@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Pocket Dragons · The Choosing — a branching affinity journey that reveals which dragon egg answers you most strongly.">
+<meta name="description" content="Pocket Dragons · The Choosing. Sixteen eggs are listening. Walk the keep and find out which one answers you.">
 <link rel="icon" href="data:,">
 <title>Pocket Dragons · The Choosing</title>
 <style>
@@ -90,6 +90,7 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
 .trace-amt{font:700 13px system-ui;color:#ffcf7e;text-align:center;background:#131b2a;border:1px solid #6d5734;border-radius:5px;padding:4px 0}
 .trace-row small{display:block;color:#9aa4b1;font-size:10px;letter-spacing:1px;text-transform:uppercase}
 .trace-row b{display:block;color:#f4e5ca;font-size:13px;font-weight:500}
+.trace-note{color:#8e97a3;font-size:11px;margin:12px 0 0;font-style:italic}
 .trace-row em.grew{display:block;font-style:normal;font-size:10.5px;color:#9fb0a4;margin-top:2px}
 .amp-line,.shared-line{color:#c9cfd7;font-size:12.5px;line-height:1.65;margin:13px 0 0}
 .amp-line b,.shared-line b{color:#ffcf7e}
@@ -351,7 +352,7 @@ const scenes = {
   final: {
     eyebrow: 'The choosing',
     title: 'The doors open at last.',
-    text: 'Sixteen colors bloom around the chamber. Your egg rises from your hands and waits. It will not become only one thing—but one affinity is singing louder than the others.',
+    text: 'Sixteen colors bloom around the chamber. Your egg lifts out of your hands and waits there. It was never going to be one thing only. But something in it is singing louder than the rest.',
     quote: '“Tell us what you carried here.”',
     img: 'Pocket_Dragons_Egg_cracking.webp',
     alt: 'A dragon egg breaking open along a widening crack',
@@ -410,7 +411,7 @@ const remaining = (() => {
 /* ---------- state ------------------------------------------------
    history[] carries, per choice, the points it put into each egg.
    When a climax choice amplifies a family, every earlier contribution
-   to those eggs is scaled too — so a contribution always equals what
+   to those eggs is scaled too, so a contribution always equals what
    that choice is worth AT THE END. Sum of contributions == final
    score, exactly, which is what lets the reveal show its work.      */
 let nodeId, step, history, amplifications;
@@ -438,7 +439,7 @@ function choose(weights, next, label, scene) {
     for (const h of history) for (const k of fam) {
       if (h.gave[k]) { before += h.gave[k]; h.gave[k] *= AMP; after += h.gave[k]; }
     }
-    // `base` is deliberately left untouched — it records what the choice was
+    // `base` is deliberately left untouched. It records what the choice was
     // worth when it was made, so the trace can show "5 grew to 7.5".
     amplifications.push({ label, scene, family: fam.slice(), gained: after - before });
   }
@@ -465,7 +466,7 @@ function traceFor(eggKey) {
     .filter(x => x.amount > 0)
     .sort((a, b) => b.amount - a.amount);
 }
-/* Choices that fed both eggs — why a runner-up stayed close. */
+/* Choices that fed both eggs, which is why a runner-up stayed close. */
 function sharedBetween(a, b) {
   return history.filter(h => (h.gave[a] || 0) > 0 && (h.gave[b] || 0) > 0).map(h => h.label);
 }
@@ -487,6 +488,8 @@ function focusHeading(el) {
   el.setAttribute('tabindex', '-1');
   el.focus({ preventScroll: true });
 }
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const numWord = n => ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] || String(n);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 /* ---------- flow --------------------------------------------------- */
@@ -547,9 +550,9 @@ function reveal() {
      raw-point threshold instead would banner a third of all playthroughs. */
   const indistinguishable = win.v === runner.v || top[0].blend === top[1].blend;
   const closeness = indistinguishable
-    ? `<p class="closeness"><b>${types[win.k].name}</b> and <b>${types[runner.k].name}</b> came out
-       level. Read this as a genuine pair rather than a winner and a runner-up — the order
-       between them is just alphabetical.</p>`
+    ? `<p class="closeness">Two answered at once. Nothing in your path separates
+       <b>${types[win.k].name}</b> from <b>${types[runner.k].name}</b>, so the order above is only
+       alphabetical. Take them as a pair.</p>`
     : '';
 
   /* --- attribution: which choices actually built the winning egg --- */
@@ -561,24 +564,35 @@ function reveal() {
     '<div><small>' + esc(scenes[x.node].eyebrow) + '</small>' +
     '<b>' + esc(x.label) + '</b>' +
     (x.amount > x.base
-      ? '<em class="grew">gave ' + r1(x.base) + ', grew to ' + r1(x.amount) + '</em>'
+      ? '<em class="grew">was ' + r1(x.base) + '</em>'
       : '') +
     '</div></li>').join('');
   const traceCovered = shown.reduce((a, x) => a + x.amount, 0);
   const tracePct = Math.round(traceCovered / (win.v || 1) * 100);
 
   /* --- the climax moment, if it moved the winner --- */
-  const amp = amplifications.filter(a => a.family.includes(win.k)).pop();
-  const ampLine = amp
-    ? `<p class="amp-line">Then you answered <b>${esc(amp.label)}</b> — and everything you had
-       already gathered toward ${types[win.k].name} grew by half again.</p>`
-    : '';
+  const amps = amplifications.filter(a => a.family.includes(win.k));
+  const plain = a => esc(a.label.replace(/^I carried /, '').toLowerCase());
+  const name = types[win.k].name;
+  let ampLine = '';
+  if (amps.length >= 2) {
+    ampLine = `<p class="amp-line">Twice you leaned the same way. <b>${cap(plain(amps[0]))}</b>, then
+      <b>${plain(amps[amps.length - 1])}</b>. Each time, whatever was already ${name} in you ran deeper.</p>`;
+  } else if (amps.length === 1) {
+    ampLine = amps[0].scene === 'feeling'
+      ? `<p class="amp-line">Then the egg asked for a feeling and you gave it <b>${plain(amps[0])}</b>.
+         Everything already leaning toward ${name} leaned harder.</p>`
+      : `<p class="amp-line">At the last door you named what you carried. <b>${cap(plain(amps[0]))}</b>.
+         Whatever was already ${name} in you ran deeper for it.</p>`;
+  }
 
   const sharedLabels = sharedBetween(win.k, runner.k);
   const sharedLine = sharedLabels.length
-    ? `<p class="shared-line"><b>${types[runner.k].name}</b> stayed close because
-       ${sharedLabels.length === 1 ? 'one choice fed both' : sharedLabels.length + ' of your choices fed both'}:
-       ${sharedLabels.slice(0, 3).map(l => '“' + esc(l) + '”').join(', ')}.</p>`
+    ? `<p class="shared-line"><b>${types[runner.k].name}</b> never fell far behind.
+       ${sharedLabels.length === 1
+          ? 'One moment fed them both:'
+          : numWord(sharedLabels.length) + ' of your moments fed them both, starting with'}
+       “${esc(sharedLabels[0])}.”</p>`
     : '';
 
   /* --- sidebar: the whole constellation, relative to your strongest --- */
@@ -592,7 +606,7 @@ function reveal() {
 
   setProgress(100, 'Affinity revealed');
   $('#eggCardTitle').textContent = 'Resonance revealed.';
-  $('#eggCardBody').textContent  = 'Bars below are relative to your strongest egg.';
+  $('#eggCardBody').textContent  = 'Every egg you touched, measured against the loudest.';
   eggminiEl.innerHTML =
     '<img src="' + types[win.k].img + '" alt="The ' + types[win.k].name + ' egg">' +
     '<div><b>' + types[win.k].name + '</b><small>your strongest</small></div>';
@@ -602,8 +616,7 @@ function reveal() {
   resultEl.innerHTML =
     '<div class="eyebrow">Your pocket dragon resonance</div>' +
     '<h2>The shell knows your shape.</h2>' +
-    '<p>No single egg holds all of you. These three answered loudest, and the figures are how ' +
-    'your resonance divides between them.</p>' +
+    '<p>No one egg holds all of you. Three answered. This is how much of you went to each.</p>' +
     '<div class="top-three">' + top.map((x, i) =>
       '<article class="eggcard"><span class="pct">' + x.blend + '%</span>' +
       '<img src="' + types[x.k].img + '" alt="The ' + types[x.k].name + ' egg">' +
@@ -611,10 +624,15 @@ function reveal() {
       '<small>' + Math.round(x.v * 10) / 10 + ' resonance</small></div></article>').join('') +
     '</div>' +
     closeness +
-    '<section class="why"><h3>Why ' + types[win.k].name + '</h3>' +
-      '<p>These choices built it — the number is what each one is worth after everything that ' +
-      'followed. Together they are ' + tracePct + '% of your ' + types[win.k].name + ' resonance.</p>' +
+    '<section class="why"><h3>How ' + types[win.k].name + ' found you</h3>' +
+      '<p>' + (shown.length === 1
+        ? 'It came down to a single moment.'
+        : shown.length === 2
+          ? 'Two moments did most of the work.'
+          : 'You never chose it. You kept doing small things, and it kept answering.') + '</p>' +
       '<ol class="trace">' + traceRows + '</ol>' +
+      '<p class="trace-note">Each figure counts what that moment was worth by the end. ' +
+      'Together, ' + tracePct + '% of your ' + types[win.k].name + '.</p>' +
       ampLine + sharedLine +
     '</section>' +
     '<div class="actions">' +
@@ -635,15 +653,14 @@ function review() {
   resultEl.innerHTML =
     '<div class="eyebrow">Your path through the keep</div>' +
     '<h2>Every choice you carried.</h2>' +
-    '<p>The figure beside each step is what it contributed to ' + types[win].name +
-    ', counted after every amplification that followed it. Steps that gave nothing to ' +
-    types[win].name + ' still shaped the rest of your constellation.</p>' +
+    '<p>Here is the path you walked. The marked steps are the ones ' + types[win].name +
+    ' heard. The rest were not wasted. They went to the other fifteen.</p>' +
     '<div class="review-list">' + history.map((h, i) => {
       const amt = h.gave[win] || 0;
       return '<div class="review-row' + (amt > 0 ? ' fed' : '') + '">' +
         '<span>' + String(i + 1).padStart(2, '0') + '</span>' +
         '<div><small>' + esc(scenes[h.node].eyebrow) + '</small><b>' + esc(h.label) + '</b></div>' +
-        '<em>' + (amt > 0 ? '+' + (Math.round(amt * 10) / 10) : '—') + '</em></div>';
+        '<em>' + (amt > 0 ? '+' + (Math.round(amt * 10) / 10) : '·') + '</em></div>';
     }).join('') +
     '</div>' +
     '<div class="actions">' +

@@ -10,16 +10,16 @@ different next scene while contributing weighted resonance (5/3/1) to three egg
 types.
 
 The last two scenes work differently. Instead of adding a fixed handful of
-points, they **amplify what the player has already gathered** — answering
-"Anger" scales up whatever heat you'd accumulated, "Calm" scales up your
+points, they **amplify what the player has already gathered**. Answering
+"Anger" scales up whatever heat you'd accumulated. "Calm" scales up your
 stillness. This is why the ending feels decisive without narrowing the outcome:
 multiplying your own profile can't bottleneck the way adding fixed points to a
-fixed subset of eggs does. It also matches what the prose already implies —
+fixed subset of eggs does. It also matches what the prose already implies:
 "tell us what you carried here" should interpret the journey, not contribute
 to it.
 
 The reveal shows the top three as a blend summing to 100%, the full sixteen-egg
-constellation relative to the strongest, and — the point of the whole thing —
+constellation relative to the strongest, and, the point of the whole thing,
 **which specific choices built the winning egg**. Every contribution is tracked
 as what that choice is worth *after* every amplification that followed it, so
 the listed figures sum exactly to the score. Nothing on the reveal is
@@ -56,7 +56,7 @@ trailer panel that actually plays them.
 
 ## QA
 
-The test suite runs automatically on GitHub via `.github/workflows/qa.yml` — every
+The test suite runs automatically on GitHub via `.github/workflows/qa.yml` on every
 push and pull request. Nothing to install locally; check the Actions tab for a
 green tick before letting a commit reach production.
 
@@ -70,5 +70,5 @@ To run it locally instead, if you have Node installed:
     cd qa && npm install && npm test
 
 `qa/` is test-only and not part of the page. Render publishes the repo root, so
-the file is reachable at `/qa/qa.js` — it contains no secrets, but move the site
+the file is reachable at `/qa/qa.js`. It contains no secrets, but move the site
 into a subfolder and repoint `staticPublishPath` if you would rather it weren't.
