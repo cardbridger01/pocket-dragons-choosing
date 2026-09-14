@@ -1,0 +1,6 @@
+services:
+  - type: web
+    runtime: static
+    name: pocket-dragons-choosing
+    buildCommand: ""
+    staticPublishPath: .
