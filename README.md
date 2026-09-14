@@ -39,6 +39,20 @@ Verified properties of the graph:
 - Attribution is mathematically exact on all 1,584 paths
 - Every display name matches its art label and asset filename
 
+## Sharing
+
+The reveal carries a share button that opens an X post intent with the player's
+top three and a link back to the site. X builds the link preview from the
+`og:` and `twitter:` meta tags at the top of `index.html`, and it reads those
+from static HTML, so **the two absolute URLs there must match wherever the site
+actually lives**. They currently point at `pocket-dragons-choosing.onrender.com`.
+Change both if you move to a custom domain, or the preview card will point at
+the wrong host. `share-card.jpg` is a 1200x630 crop built for that card, because
+X renders previews at 1.91:1 and would otherwise crop the 3:1 banner.
+
+The reveal and the journey review both credit PocketDragons.io and link to the
+official Hatchery at https://pocketdragons.io.
+
 ## Deploying to Render
 
 `render.yaml` declares a static site rooted at this folder with long-lived

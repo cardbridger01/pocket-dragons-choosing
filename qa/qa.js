@@ -155,6 +155,42 @@ ok($('.scene h2')!==null,'run 2: first scene rendered');
 ok(D.querySelectorAll('.review-row').length===0,'run 2: previous journey cleared');
 play('run 2');
 
+head('Sharing and attribution');
+{
+  const a=$('.share');
+  ok(!!a,'reveal has a share button');
+  ok(a && /^https:\/\/x\.com\/intent\/post\?/.test(a.href),'share targets the X post intent');
+  ok(a && a.target==='_blank' && /noopener/.test(a.rel),'share opens safely in a new tab');
+  if(a){
+    const u=new URL(a.href);
+    const text=u.searchParams.get('text')||'';
+    ok(text.length>0 && text.length<=240,`tweet text fits (${text.length} chars)`);
+    // http is legitimate here: the harness serves over localhost. What matters is
+    // that the link is absolute, not that it is TLS in a test rig.
+    const back=u.searchParams.get('url')||'';
+    ok(/^https?:\/\/[^/]+/.test(back),'share carries an absolute link back to the site ('+back+')');
+  }
+  const off=$('.official a');
+  ok(!!off,'reveal links to the official site');
+  ok(off && /^https:\/\/pocketdragons\.io/.test(off.href),'official link points at pocketdragons.io');
+  ok(off && off.target==='_blank' && /noopener/.test(off.rel),'official link opens safely');
+  ok(!!$('.rights'),'image rights notice present');
+  ok($('.rights').textContent.includes('PocketDragons.io'),'rights notice credits PocketDragons.io');
+}
+// link-preview tags are read from static HTML by the crawler, so they must be absolute
+{
+  const meta=k=>{const m=D.querySelector('meta[property="'+k+'"], meta[name="'+k+'"]');return m?m.content:'';};
+  for(const k of ['og:title','og:description','og:url','og:image','twitter:card','twitter:image'])
+    ok(!!meta(k),'link-preview tag present: '+k);
+  ok(/^https:\/\//.test(meta('og:image')),'og:image is an absolute URL (relative ones do not render on X)');
+  ok(/^https:\/\//.test(meta('og:url')),'og:url is an absolute URL');
+  ok(meta('twitter:card')==='summary_large_image','card type renders the large image');
+  const host=u=>{try{return new URL(u).origin}catch(e){return null}};
+  ok(host(meta('og:image'))===host(meta('og:url')),'og:image and og:url share one origin');
+  const img=meta('og:image').split('/').pop();
+  ok(fs.existsSync(path.join(DIR,img)),'share card image exists in the deploy: '+img);
+}
+
 head('Accessibility');
 ok($('#play').getAttribute('aria-live')==='polite','play region is a live region');
 ok($('#bar').getAttribute('role')==='progressbar','progress bar exposes role');

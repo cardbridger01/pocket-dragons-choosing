@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Pocket Dragons · The Choosing. Sixteen eggs are listening. Walk the keep and find out which one answers you.">
 <link rel="icon" href="data:,">
+<!-- EDIT ME if you move to a custom domain: the two absolute URLs below are what
+     X reads to build the link preview. Everything else works out of the box. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pocket Dragons · The Choosing">
+<meta property="og:title" content="Pocket Dragons · The Choosing">
+<meta property="og:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<meta property="og:url" content="https://pocket-dragons-choosing.onrender.com/">
+<meta property="og:image" content="https://pocket-dragons-choosing.onrender.com/share-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A torchlit chamber beneath the old keep, with a small dragon watching through a gap in the doors">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pocket Dragons · The Choosing">
+<meta name="twitter:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<meta name="twitter:image" content="https://pocket-dragons-choosing.onrender.com/share-card.jpg">
 <title>Pocket Dragons · The Choosing</title>
 <style>
 :root{--ink:#f8edda;--muted:#b3adac;--gold:#f2b85c;--orange:#d86a27;--deep:#090e18;--panel:#121b2a;--line:#3f4150;--green:#9ee3ba}
@@ -81,6 +96,13 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
 .actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}
 .primary{background:linear-gradient(110deg,#e1a04b,#f4c771);color:#1c1820;border:0;border-radius:7px;padding:11px 17px;font-weight:700}
 .primary:hover{filter:brightness(1.1)}
+.share{display:inline-flex;align-items:center;gap:8px;background:#e8e8ea;color:#15151a;border:0;border-radius:7px;padding:11px 16px;font-weight:700;text-decoration:none}
+.share:hover{background:#fff}
+.share svg{width:14px;height:14px;fill:currentColor}
+.official{margin:22px 0 0;padding-top:17px;border-top:1px solid #2e3849;color:#c3c9d2;font-size:13px;line-height:1.6}
+.official a{color:#ffcf7e}
+.official a:hover{color:#fff}
+.rights{margin:7px 0 0;color:#78818e;font-size:11px;line-height:1.55}
 .foot{margin-top:20px;color:#707a87;font-size:11px;text-align:center}
 .closeness{background:#1d2636;border-left:3px solid var(--gold);border-radius:0 7px 7px 0;padding:11px 14px;margin:0 0 18px;font-size:13px;color:#dcd6ca}
 .why{background:#151f2e;border:1px solid #34405260;border-radius:11px;padding:18px 20px;margin-top:4px}
@@ -645,13 +667,44 @@ function reveal() {
       ampLine + sharedLine +
     '</section>' +
     '<div class="actions">' +
+      shareButton(top) +
       '<button class="primary" id="again">Begin another choosing</button>' +
       '<button class="ghost" id="showJourney">Review your journey</button>' +
-    '</div>';
+    '</div>' +
+    attribution();
 
   $('#again').addEventListener('click', reset);
   $('#showJourney').addEventListener('click', review);
   focusHeading(resultEl.querySelector('h2'));
+}
+
+/* The crawler reads the absolute URL from the <meta> tags above; this is just
+   what gets appended to the tweet. Falls back to the canonical site when the
+   page is opened straight off disk, where location.origin is "null". */
+const SITE_URL = 'https://pocket-dragons-choosing.onrender.com/';
+const shareTarget = () =>
+  location.protocol === 'http:' || location.protocol === 'https:'
+    ? location.origin + location.pathname
+    : SITE_URL;
+
+function shareButton(top) {
+  const n = top.map(x => types[x.k].name);
+  const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
+               `close behind.\n\nWhich one answers you?`;
+  const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) +
+               '&url=' + encodeURIComponent(shareTarget());
+  return '<a class="share" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.2h3.7l-8.1 9.2 9.5 12.5h-7.4' +
+    'l-5.8-7.6-6.7 7.6H.4l8.6-9.8L0 1.2h7.6l5.2 6.9ZM17.6 20.7h2L6.5 3.2H4.3Z"/></svg>' +
+    'Share your result</a>';
+}
+
+function attribution() {
+  return '<p class="official">Haven\u2019t become a keeper and received your real egg yet? ' +
+    '<a href="https://pocketdragons.io" target="_blank" rel="noopener noreferrer">' +
+    'Sign up on the official page at pocketdragons.io</a></p>' +
+    '<p class="rights">All images property of PocketDragons.io. ' +
+    'The Choosing is a fan-made page and is not affiliated with or endorsed by Pocket Dragons.</p>';
 }
 
 function review() {
@@ -675,7 +728,8 @@ function review() {
     '<div class="actions">' +
       '<button class="primary" id="backReveal">Return to affinity reveal</button>' +
       '<button class="ghost" id="againFromReview">Begin another choosing</button>' +
-    '</div>';
+    '</div>' +
+    attribution();
   $('#backReveal').addEventListener('click', reveal);
   $('#againFromReview').addEventListener('click', reset);
   focusHeading(resultEl.querySelector('h2'));
