@@ -1,0 +1,11 @@
+{
+  "name": "pocket-dragons-qa",
+  "private": true,
+  "description": "Test harness for Pocket Dragons - The Choosing. Not part of the deployed site.",
+  "scripts": {
+    "test": "node qa.js .."
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}
