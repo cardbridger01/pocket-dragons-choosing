@@ -1,7 +1,7 @@
 {
   "name": "pocket-dragons-qa",
   "private": true,
-  "description": "Test harness for Pocket Dragons - The Choosing. Not part of the deployed site.",
+  "description": "Test harness for Pocket Dragons - The Choosing. Not part of the deployed site. Verified against jsdom 24.1.3 and 30.0.1 on Node 20 and 22.",
   "scripts": {
     "test": "node qa.js .."
   },

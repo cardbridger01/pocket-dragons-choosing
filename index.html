@@ -14,7 +14,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .skip{position:absolute;left:-9999px;top:0;background:#121b2a;border:1px solid var(--gold);padding:10px 14px;border-radius:7px;z-index:20}
 .skip:focus{left:12px;top:12px}
-.hero{min-height:210px;background:linear-gradient(90deg,#07101ed9,#07101e33),url('banner_2.webp') center/cover;display:flex;align-items:end;padding:26px clamp(20px,5vw,80px);border-bottom:1px solid #765636;position:relative}
+.hero{min-height:210px;background:linear-gradient(90deg,#07101ed9,#07101e33),url('banner_2.png') center/cover;display:flex;align-items:end;padding:26px clamp(20px,5vw,80px);border-bottom:1px solid #765636;position:relative}
 .brand{font:700 11px system-ui;letter-spacing:4px;color:#ffca72;text-transform:uppercase}
 .hero h1{margin:3px 0 0;font:42px Georgia,serif;letter-spacing:2px}
 .hero p{margin:4px 0 0;color:#dfd8ca}
@@ -81,6 +81,22 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
 .primary{background:linear-gradient(110deg,#e1a04b,#f4c771);color:#1c1820;border:0;border-radius:7px;padding:11px 17px;font-weight:700}
 .primary:hover{filter:brightness(1.1)}
 .foot{margin-top:20px;color:#707a87;font-size:11px;text-align:center}
+.closeness{background:#1d2636;border-left:3px solid var(--gold);border-radius:0 7px 7px 0;padding:11px 14px;margin:0 0 18px;font-size:13px;color:#dcd6ca}
+.why{background:#151f2e;border:1px solid #34405260;border-radius:11px;padding:18px 20px;margin-top:4px}
+.why h3{font:22px Georgia,serif;margin:0 0 6px;color:#ffe2ae}
+.why>p{color:#aeb6c1;font-size:12.5px;margin:0 0 14px;max-width:640px}
+.trace{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trace-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;background:#1e2839;border:1px solid #3c4a5a;border-radius:7px;padding:9px 12px}
+.trace-amt{font:700 13px system-ui;color:#ffcf7e;text-align:center;background:#131b2a;border:1px solid #6d5734;border-radius:5px;padding:4px 0}
+.trace-row small{display:block;color:#9aa4b1;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.trace-row b{display:block;color:#f4e5ca;font-size:13px;font-weight:500}
+.trace-row em.grew{display:block;font-style:normal;font-size:10.5px;color:#9fb0a4;margin-top:2px}
+.amp-line,.shared-line{color:#c9cfd7;font-size:12.5px;line-height:1.65;margin:13px 0 0}
+.amp-line b,.shared-line b{color:#ffcf7e}
+.score.faint{opacity:.42}
+.review-row{grid-template-columns:32px 1fr 46px}
+.review-row em{font-style:normal;text-align:right;font-size:12px;color:#7f8994}
+.review-row.fed em{color:#ffcf7e;font-weight:700}
 .hidden{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.scene{grid-template-columns:1fr}.visual{height:125px;order:-1}.hero h1{font-size:32px}.topbar{top:12px}.badge{display:none}}
@@ -147,9 +163,9 @@ const types = {
   Ghost:     { name: 'Ghost',     img: 'Ghost.webp',     tag: 'memory'     },
   Ice:       { name: 'Ice',       img: 'Ice.webp',       tag: 'clarity'    },
   Jelly:     { name: 'Jelly',     img: 'Jelly.webp',     tag: 'joy'        },
+  Lava:      { name: 'Lava',      img: 'Lava.webp',      tag: 'wildness'   },
   Light:     { name: 'Light',     img: 'Light.webp',     tag: 'warmth'     },
   Lightning: { name: 'Lightning', img: 'Lightning.webp', tag: 'instinct'   },
-  Lva:       { name: 'Lva',       img: 'Lva.webp',       tag: 'wildness'   },
   Panda:     { name: 'Panda',     img: 'Panda.webp',     tag: 'balance'    },
   Pink:      { name: 'Pink',      img: 'Pink.webp',      tag: 'connection' },
   Shadow:    { name: 'Shadow',    img: 'Shadow.webp',    tag: 'mystery'    },
@@ -170,9 +186,9 @@ const scenes = {
     img: 'banner_2.webp',
     alt: 'A round stone chamber lined with sixteen alcoves of sleeping dragon eggs',
     choices: [
-      ['Follow the sound', 'A tiny rhythm, patient and almost musical.', { Water: 3, Tiger: 2, Light: 1 }, 'sound'],
-      ['Study the eggs', 'The room is a puzzle before it is a threat.', { Shadow: 3, Ice: 2, Space: 1 }, 'eggs'],
-      ['Touch your own shell', 'Warmth answers warmth. Something answers back.', { Jelly: 3, "2face": 2, Shadow: 1 }, 'shell']
+      ['Follow the sound', 'A tiny rhythm, patient and almost musical.', { Water: 5, Light: 3, Lightning: 1 }, 'sound'],
+      ['Study the eggs', 'The room is a puzzle before it is a threat.', { Shadow: 5, Space: 3, Ice: 1 }, 'eggs'],
+      ['Touch your own shell', 'Warmth answers warmth. Something answers back.', { Jelly: 5, "2face": 3, Pink: 1 }, 'shell']
     ]
   },
   sound: {
@@ -183,9 +199,9 @@ const scenes = {
     img: 'Pocket_Dragons_Egg_cracking.webp',
     alt: 'A dragon egg with light beginning to seep through a crack in its shell',
     choices: [
-      ['Open the door immediately', 'A signal is an invitation until proven otherwise.', { Lightning: 3, Speed: 2, Tiger: 1 }, 'archive'],
-      ['Block the light and listen', 'You want to understand the pattern first.', { Ghost: 3, "2face": 2, Shadow: 1 }, 'keeper'],
-      ['Answer with your own light', 'You make a small, steady glow with the egg.', { Light: 3, Ghost: 2, Space: 1 }, 'hatch']
+      ['Open the door immediately', 'A signal is an invitation until proven otherwise.', { Lightning: 5, Speed: 3, Light: 1 }, 'archive'],
+      ['Block the light and listen', 'You want to understand the pattern first.', { Ghost: 5, Panda: 3, "2face": 1 }, 'keeper'],
+      ['Answer with your own light', 'You make a small, steady glow with the egg.', { Light: 5, Ghost: 3, Tiger: 1 }, 'hatch']
     ]
   },
   eggs: {
@@ -196,9 +212,9 @@ const scenes = {
     img: 'Ice.webp',
     alt: 'A pale blue egg rimed with frost inside a dim alcove',
     choices: [
-      ['Choose the frost-marked alcove', 'Clarity feels kinder than certainty.', { Ice: 3, "2face": 2, Space: 1 }, 'mirror'],
-      ['Choose the gold pulse', 'You reach for the warmth that reaches back.', { Light: 3, Pink: 2, Panda: 1 }, 'garden'],
-      ['Choose the moving marks', 'A mystery is more alive than an answer.', { Ghost: 3, Panda: 2, Acid: 1 }, 'rift']
+      ['Choose the frost-marked alcove', 'Clarity feels kinder than certainty.', { Ice: 5, "2face": 3, Panda: 1 }, 'mirror'],
+      ['Choose the gold pulse', 'You reach for the warmth that reaches back.', { Light: 5, Pink: 3, Tiger: 1 }, 'garden'],
+      ['Choose the moving marks', 'A mystery is more alive than an answer.', { Ghost: 5, Acid: 3, Lava: 1 }, 'rift']
     ]
   },
   shell: {
@@ -209,9 +225,9 @@ const scenes = {
     img: 'Pocket_Dragons_Egg_cracking.webp',
     alt: 'A dragon egg splitting along a thin seam of warm light',
     choices: [
-      ['Tap a rhythm', 'You answer its almost-musical pulse.', { Water: 3, Acid: 2, Pink: 1 }, 'archive'],
-      ['Hold it still', 'You let the silence become a shelter.', { Tree: 3, Panda: 2, Ghost: 1 }, 'colossus'],
-      ['Press until it flashes', 'You want to see what it can do.', { Lightning: 3, Acid: 2, Lva: 1 }, 'storm']
+      ['Tap a rhythm', 'You answer its almost-musical pulse.', { Water: 5, Lava: 3, Acid: 1 }, 'archive'],
+      ['Hold it still', 'You let the silence become a shelter.', { Tree: 5, Ghost: 3, Ice: 1 }, 'colossus'],
+      ['Press until it flashes', 'You want to see what it can do.', { Lightning: 5, Acid: 3, Lava: 1 }, 'storm']
     ]
   },
   archive: {
@@ -222,9 +238,9 @@ const scenes = {
     img: 'Water.webp',
     alt: 'Deep water over sunken library shelves',
     choices: [
-      ['Swim for the chest', 'The unknown is worth getting soaked for.', { Water: 3, Lva: 2, Jelly: 1 }, 'rift'],
-      ['Walk the ledge to the bell', 'A clear goal gives the fear somewhere to go.', { Speed: 3, Lightning: 2, Acid: 1 }, 'storm'],
-      ['Help the paper dragon first', 'It is lost, and that matters more than the chest.', { Pink: 3, Light: 2, Panda: 1 }, 'keeper']
+      ['Swim for the chest', 'The unknown is worth getting soaked for.', { Water: 5, Lava: 3, Lightning: 1 }, 'rift'],
+      ['Walk the ledge to the bell', 'A clear goal gives the fear somewhere to go.', { Speed: 5, Tiger: 3, Lightning: 1 }, 'storm'],
+      ['Help the paper dragon first', 'It is lost, and that matters more than the chest.', { Pink: 5, Tree: 3, Light: 1 }, 'keeper']
     ]
   },
   mirror: {
@@ -235,9 +251,9 @@ const scenes = {
     img: '2face.webp',
     alt: 'A two-faced dragon egg, one half bright and one half dark',
     choices: [
-      ['Speak to the smiling one', 'You trust the self that reaches outward.', { Pink: 3, Water: 2, Light: 1 }, 'garden'],
-      ['Ask the hidden one what it knows', 'The parts you avoid may be carrying the key.', { Shadow: 3, Ghost: 2, "2face": 1 }, 'rift'],
-      ['Break the mirrors', 'You refuse to be reduced to a reflection.', { Tiger: 3, Acid: 2, Lva: 1 }, 'storm']
+      ['Speak to the smiling one', 'You trust the self that reaches outward.', { Pink: 5, Light: 3, Tiger: 1 }, 'garden'],
+      ['Ask the hidden one what it knows', 'The parts you avoid may be carrying the key.', { Shadow: 5, "2face": 3, Panda: 1 }, 'rift'],
+      ['Break the mirrors', 'You refuse to be reduced to a reflection.', { Tiger: 5, Acid: 3, Lava: 1 }, 'storm']
     ]
   },
   garden: {
@@ -248,9 +264,9 @@ const scenes = {
     img: 'Tree.webp',
     alt: 'A green dragon egg wrapped in roots and new leaves',
     choices: [
-      ['Plant the seed here', 'A future deserves a place to begin.', { Tree: 3, Pink: 2, Water: 1 }, 'colossus'],
-      ['Carry it into the bright clearing', 'You want growth where it can be witnessed.', { Light: 3, Jelly: 2, Water: 1 }, 'hatch'],
-      ['Follow it into the dark burrow', 'Some roots only grow where no one applauds.', { Shadow: 3, Lva: 2, Space: 1 }, 'keeper']
+      ['Plant the seed here', 'A future deserves a place to begin.', { Tree: 5, Pink: 3, Acid: 1 }, 'colossus'],
+      ['Carry it into the bright clearing', 'You want growth where it can be witnessed.', { Light: 5, Acid: 3, Jelly: 1 }, 'hatch'],
+      ['Follow it into the dark burrow', 'Some roots only grow where no one applauds.', { Shadow: 5, Lava: 3, Tiger: 1 }, 'keeper']
     ]
   },
   colossus: {
@@ -261,9 +277,9 @@ const scenes = {
     img: '3D_Character_Sheet_Blinky.webp',
     alt: 'Character studies of a small round dragon with large eyes',
     choices: [
-      ['Wait beside it', 'Some doors open only when no one pushes.', { Tree: 3, Panda: 2, "2face": 1 }, 'rift'],
-      ['Climb over its back', 'The quickest path is also the strangest.', { Speed: 3, Lva: 2, Acid: 1 }, 'hatch'],
-      ['Offer it your food', 'You meet power with care instead of fear.', { Panda: 3, Pink: 2, Water: 1 }, 'keeper']
+      ['Wait beside it', 'Some doors open only when no one pushes.', { Tree: 5, Panda: 3, "2face": 1 }, 'rift'],
+      ['Climb over its back', 'The quickest path is also the strangest.', { Speed: 5, Acid: 3, Lava: 1 }, 'hatch'],
+      ['Offer it your food', 'You meet power with care instead of fear.', { Panda: 5, Pink: 3, Jelly: 1 }, 'keeper']
     ]
   },
   storm: {
@@ -274,9 +290,9 @@ const scenes = {
     img: 'Lightning.webp',
     alt: 'A dragon egg crackling with branching arcs of lightning',
     choices: [
-      ['Run straight up', 'You commit before doubt can catch you.', { Lightning: 3, Acid: 2, Tiger: 1 }, 'hatch'],
-      ['Cross the broken bridge', 'You measure each step, then make the leap.', { Ice: 3, "2face": 2, Space: 1 }, 'rift'],
-      ['Descend toward the foundations', 'The safest answer may be the one nobody sees.', { Shadow: 3, Speed: 2, Ghost: 1 }, 'keeper']
+      ['Run straight up', 'You commit before doubt can catch you.', { Lightning: 5, Acid: 3, Light: 1 }, 'hatch'],
+      ['Cross the broken bridge', 'You measure each step, then make the leap.', { Ice: 5, Ghost: 3, "2face": 1 }, 'rift'],
+      ['Descend toward the foundations', 'The safest answer may be the one nobody sees.', { Shadow: 5, Acid: 3, Speed: 1 }, 'keeper']
     ]
   },
   keeper: {
@@ -287,9 +303,9 @@ const scenes = {
     img: 'Ghost.webp',
     alt: 'A pale translucent dragon egg with a faint inner glow',
     choices: [
-      ['Break the wall for it', 'You accept the cost before asking who pays.', { Tiger: 3, Lva: 2, Light: 1 }, 'feeling'],
-      ['Teach it the release pattern', 'A shared skill will outlast a single rescue.', { Ice: 3, Ghost: 2, "2face": 1 }, 'feeling'],
-      ['Leave a trail of food', 'You cannot open every door, but you can make a path.', { Panda: 3, Water: 2, Acid: 1 }, 'feeling']
+      ['Break the wall for it', 'You accept the cost before asking who pays.', { Tiger: 5, Lightning: 3, Light: 1 }, 'feeling'],
+      ['Teach it the release pattern', 'A shared skill will outlast a single rescue.', { Ice: 5, Panda: 3, "2face": 1 }, 'feeling'],
+      ['Leave a trail of food', 'You cannot open every door, but you can make a path.', { Panda: 5, Acid: 3, Lava: 1 }, 'feeling']
     ]
   },
   rift: {
@@ -300,9 +316,9 @@ const scenes = {
     img: 'Space.webp',
     alt: 'A dark dragon egg scattered with points of starlight',
     choices: [
-      ['Enter the place you miss', 'Longing is a compass, even when it hurts.', { Water: 3, "2face": 2, Ghost: 1 }, 'feeling'],
-      ['Meet the abandoned self', 'You make room for a part you left behind.', { "2face": 3, Pink: 2, Ghost: 1 }, 'feeling'],
-      ['Step through the impossible door', 'Wonder is a form of courage.', { Space: 3, Lva: 2, Lightning: 1 }, 'feeling']
+      ['Enter the place you miss', 'Longing is a compass, even when it hurts.', { Water: 5, Ghost: 3, Ice: 1 }, 'feeling'],
+      ['Meet the abandoned self', 'You make room for a part you left behind.', { "2face": 5, Light: 3, Pink: 1 }, 'feeling'],
+      ['Step through the impossible door', 'Wonder is a form of courage.', { Space: 5, Lava: 3, Ice: 1 }, 'feeling']
     ]
   },
   hatch: {
@@ -313,9 +329,9 @@ const scenes = {
     img: 'Speed.webp',
     alt: 'A streaked dragon egg that seems to be moving at speed',
     choices: [
-      ['Follow the gentle current', 'You let the world carry you for a while.', { Water: 3, Acid: 2, Panda: 1 }, 'feeling'],
-      ['Dive into the wild current', 'A little danger makes the sky honest.', { Lva: 3, Speed: 2, Acid: 1 }, 'feeling'],
-      ['Race the impossible current', 'You want to arrive before the question changes.', { Speed: 3, Ghost: 2, Space: 1 }, 'feeling']
+      ['Follow the gentle current', 'You let the world carry you for a while.', { Water: 5, Acid: 3, Speed: 1 }, 'feeling'],
+      ['Dive into the wild current', 'A little danger makes the sky honest.', { Lava: 5, Speed: 3, Lightning: 1 }, 'feeling'],
+      ['Race the impossible current', 'You want to arrive before the question changes.', { Speed: 5, Acid: 3, Ghost: 1 }, 'feeling']
     ]
   },
   feeling: {
@@ -326,10 +342,10 @@ const scenes = {
     img: 'Ghost.webp',
     alt: 'A pale translucent dragon egg with a faint inner glow',
     choices: [
-      ['Delight', 'Let the feeling become impossible to contain.', { Jelly: 3, Light: 2, Panda: 1 }, 'final'],
-      ['Anger', 'Give the fire a direction and a name.', { Tiger: 3, Lva: 2, Acid: 1 }, 'final'],
-      ['Longing', 'Make room for what has not arrived yet.', { Space: 3, Panda: 2, Ghost: 1 }, 'final'],
-      ['Calm', 'Hold steady until the feeling changes shape.', { Tree: 3, Ghost: 2, Panda: 1 }, 'final']
+      ['Delight', 'Let the feeling become impossible to contain.', { Jelly: 5, Panda: 3, Light: 1 }, 'final'],
+      ['Anger', 'Give the fire a direction and a name.', { Tiger: 5, Lava: 3, Acid: 1 }, 'final'],
+      ['Longing', 'Make room for what has not arrived yet.', { Space: 5, "2face": 3, Ghost: 1 }, 'final'],
+      ['Calm', 'Hold steady until the feeling changes shape.', { Ghost: 5, Tree: 3, Panda: 1 }, 'final']
     ]
   },
   final: {
@@ -340,24 +356,43 @@ const scenes = {
     img: 'Pocket_Dragons_Egg_cracking.webp',
     alt: 'A dragon egg breaking open along a widening crack',
     choices: [
-      ['I carried curiosity', 'I followed the question wherever it led.', { Space: 2, Lva: 1, Lightning: 1 }, 'reveal'],
-      ['I carried connection', 'I kept looking for what needed me.', { Pink: 2, Tiger: 1, Light: 1 }, 'reveal'],
-      ['I carried freedom', 'I chose the door that felt most alive.', { Lva: 2, Acid: 1, Tiger: 1 }, 'reveal'],
-      ['I carried stillness', 'I listened until the world answered.', { Tree: 2, Ghost: 1, Jelly: 1 }, 'reveal']
+      ['I carried curiosity', 'I followed the question wherever it led.', { Space: 3, Tiger: 1, Lava: 1 }, 'reveal'],
+      ['I carried connection', 'I kept looking for what needed me.', { Pink: 3, Light: 1, Tiger: 1 }, 'reveal'],
+      ['I carried freedom', 'I chose the door that felt most alive.', { Lava: 3, Tiger: 1, Acid: 1 }, 'reveal'],
+      ['I carried stillness', 'I listened until the world answered.', { Tree: 3, Space: 1, Jelly: 1 }, 'reveal']
     ]
   }
 };
 
+/* ---------- climax families -------------------------------------
+   The last two scenes do not add a fixed handful of points. They
+   AMPLIFY what the player has already gathered. "Tell us what you
+   carried here" should interpret the journey, not contribute to it.
+   Grouping is a fan reading, not official Pocket Dragons material. */
+const AMP = 1.5;
+const families = {
+  'Delight':  ['Jelly','Light','Pink','Water'],
+  'Anger':    ['Tiger','Lava','Acid','Lightning','Speed'],
+  'Longing':  ['Space','Ghost','Shadow','2face'],
+  'Calm':     ['Tree','Panda','Ice','Water'],
+  'curiosity':['Space','Ice','Ghost','Shadow','2face'],
+  'connection':['Pink','Light','Jelly','Panda'],
+  'freedom':  ['Lava','Speed','Lightning','Acid','Tiger'],
+  'stillness':['Tree','Water','Panda','Ghost']
+};
+const familyFor = label => {
+  const l = label.toLowerCase();
+  for (const k of Object.keys(families)) if (l.includes(k.toLowerCase())) return families[k];
+  return null;
+};
+
 /* ---------- progress model ---------------------------------------
-   Paths through the graph are 5-8 choices long, so a fixed
-   denominator is always wrong. Instead, compute the fewest choices
-   still needed from each scene, then report
-       progress = taken / (taken + remaining).
-   remaining(next) >= remaining(current) - 1 for every edge, so the
-   bar is guaranteed to be monotonic and to land exactly on 100%.   */
+   Paths are 5-8 choices long, so a fixed denominator is always wrong.
+   remaining[] holds the fewest choices still needed from each scene;
+   progress = taken / (taken + remaining). Guaranteed monotonic, and
+   lands exactly on 100%.                                            */
 const remaining = (() => {
-  const r = {};
-  let changed = true;
+  const r = {}; let changed = true;
   while (changed) {
     changed = false;
     for (const [id, s] of Object.entries(scenes)) {
@@ -372,16 +407,17 @@ const remaining = (() => {
   return r;
 })();
 
-/* ---------- state ------------------------------------------------ */
-let scores, nodeId, step, history;
+/* ---------- state ------------------------------------------------
+   history[] carries, per choice, the points it put into each egg.
+   When a climax choice amplifies a family, every earlier contribution
+   to those eggs is scaled too — so a contribution always equals what
+   that choice is worth AT THE END. Sum of contributions == final
+   score, exactly, which is what lets the reveal show its work.      */
+let nodeId, step, history, amplifications;
 
 const $ = sel => document.querySelector(sel);
-const playEl   = $('#play');
-const resultEl = $('#result');
-const eggminiEl = $('#eggmini');
+const playEl = $('#play'), resultEl = $('#result'), eggminiEl = $('#eggmini');
 
-/* The sidebar egg card is overwritten at the reveal, so keep a
-   pristine copy to restore on restart. (v3/v4 bug: it never came back.) */
 const EGG_CARD_PRISTINE = {
   title: $('#eggCardTitle').textContent,
   body:  $('#eggCardBody').textContent,
@@ -389,6 +425,52 @@ const EGG_CARD_PRISTINE = {
          '<div><b>Unrevealed</b><small>Alignment forming</small></div>'
 };
 
+function totals() {
+  const t = {}; keys.forEach(k => t[k] = 0);
+  for (const h of history) for (const k of keys) t[k] += (h.gave[k] || 0);
+  return t;
+}
+
+function choose(weights, next, label, scene) {
+  const fam = (scene === 'feeling' || scene === 'final') ? familyFor(label) : null;
+  if (fam) {
+    let before = 0, after = 0;
+    for (const h of history) for (const k of fam) {
+      if (h.gave[k]) { before += h.gave[k]; h.gave[k] *= AMP; after += h.gave[k]; }
+    }
+    // `base` is deliberately left untouched — it records what the choice was
+    // worth when it was made, so the trace can show "5 grew to 7.5".
+    amplifications.push({ label, scene, family: fam.slice(), gained: after - before });
+  }
+  const gave = {}, base = {};
+  for (const [k, v] of Object.entries(weights)) { gave[k] = v; base[k] = v; }
+  history.push({ node: nodeId, label, gave, base, amplified: !!fam });
+  step++;
+  if (next === 'reveal') { reveal(); return; }
+  nodeId = next; render();
+}
+
+function ranking() {
+  const t = totals();
+  const total = keys.reduce((a, k) => a + t[k], 0) || 1;
+  return keys.map(k => ({ k, v: t[k], share: t[k] / total * 100 }))
+             .sort((a, b) => b.v - a.v || types[a.k].name.localeCompare(types[b.k].name));
+}
+
+/* Which choices built this egg, biggest first. */
+function traceFor(eggKey) {
+  return history
+    .map((h, i) => ({ i, label: h.label, node: h.node,
+                      amount: h.gave[eggKey] || 0, base: h.base[eggKey] || 0 }))
+    .filter(x => x.amount > 0)
+    .sort((a, b) => b.amount - a.amount);
+}
+/* Choices that fed both eggs — why a runner-up stayed close. */
+function sharedBetween(a, b) {
+  return history.filter(h => (h.gave[a] || 0) > 0 && (h.gave[b] || 0) > 0).map(h => h.label);
+}
+
+/* ---------- shared helpers ---------------------------------------- */
 function setProgress(pct, label) {
   pct = Math.max(0, Math.min(100, Math.round(pct)));
   $('#meter').style.width = pct + '%';
@@ -396,26 +478,20 @@ function setProgress(pct, label) {
   $('#bar').setAttribute('aria-valuenow', pct);
   $('#stepLabel').textContent = label;
 }
-
 function sealScores() {
   $('#scoreMask').classList.remove('hidden');
   $('#scores').classList.add('hidden');
 }
-
 function focusHeading(el) {
   if (!el) return;
   el.setAttribute('tabindex', '-1');
   el.focus({ preventScroll: true });
 }
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-/* ---------- flow -------------------------------------------------- */
+/* ---------- flow --------------------------------------------------- */
 function reset() {
-  scores = {};
-  keys.forEach(k => scores[k] = 0);
-  nodeId = 'start';
-  step = 0;
-  history = [];
-
+  nodeId = 'start'; step = 0; history = []; amplifications = [];
   resultEl.classList.remove('show');
   resultEl.innerHTML = '';
   sealScores();
@@ -423,23 +499,12 @@ function reset() {
   $('#eggCardTitle').textContent = EGG_CARD_PRISTINE.title;
   $('#eggCardBody').textContent  = EGG_CARD_PRISTINE.body;
   eggminiEl.innerHTML = EGG_CARD_PRISTINE.mini;
-
-  render();
-}
-
-function choose(weights, next, label) {
-  for (const [k, v] of Object.entries(weights)) scores[k] += v;
-  history.push({ node: nodeId, label });
-  step++;
-  if (next === 'reveal') { reveal(); return; }
-  nodeId = next;
   render();
 }
 
 function render() {
   const s = scenes[nodeId];
   sealScores();
-
   const left = remaining[nodeId];
   setProgress(step / (step + left) * 100,
               left === 1 ? `Choice ${step + 1} · last one` : `Choice ${step + 1}`);
@@ -457,52 +522,101 @@ function render() {
       '</div>' +
     '</div><div class="visual"><img src="' + s.img + '" alt="' + s.alt + '"></div></div>';
 
+  const here = nodeId;
   playEl.querySelectorAll('.choice').forEach(btn => {
     btn.addEventListener('click', () => {
       const c = s.choices[+btn.dataset.i];
-      choose(c[2], c[3], c[0]);
+      choose(c[2], c[3], c[0], here);
     });
   });
-
   focusHeading(playEl.querySelector('h2'));
 }
 
 function reveal() {
-  const total = Object.values(scores).reduce((a, b) => a + b, 0) || 1;
-  const ranked = keys
-    .map(k => ({ k, v: scores[k], pct: Math.round(scores[k] / total * 100) }))
-    .sort((a, b) => b.v - a.v || types[a.k].name.localeCompare(types[b.k].name));
+  const ranked = ranking();
   const top = ranked.slice(0, 3);
+  const t3 = top.reduce((a, x) => a + x.v, 0) || 1;
+  top.forEach(x => x.blend = Math.round(x.v / t3 * 100));
+  // rounding guard so the three always read as exactly 100
+  const drift = 100 - top.reduce((a, x) => a + x.blend, 0);
+  top[0].blend += drift;
 
+  const win = top[0], runner = top[1];
+  /* Only flag a near-tie when the figures on screen cannot separate the two.
+     If the player can see 46% beat 39%, the win explains itself. Firing on a
+     raw-point threshold instead would banner a third of all playthroughs. */
+  const indistinguishable = win.v === runner.v || top[0].blend === top[1].blend;
+  const closeness = indistinguishable
+    ? `<p class="closeness"><b>${types[win.k].name}</b> and <b>${types[runner.k].name}</b> came out
+       level. Read this as a genuine pair rather than a winner and a runner-up — the order
+       between them is just alphabetical.</p>`
+    : '';
+
+  /* --- attribution: which choices actually built the winning egg --- */
+  const trace = traceFor(win.k);
+  const shown = trace.slice(0, 3);
+  const r1 = n => Math.round(n * 10) / 10;
+  const traceRows = shown.map(x =>
+    '<li class="trace-row"><span class="trace-amt">+' + r1(x.amount) + '</span>' +
+    '<div><small>' + esc(scenes[x.node].eyebrow) + '</small>' +
+    '<b>' + esc(x.label) + '</b>' +
+    (x.amount > x.base
+      ? '<em class="grew">gave ' + r1(x.base) + ', grew to ' + r1(x.amount) + '</em>'
+      : '') +
+    '</div></li>').join('');
+  const traceCovered = shown.reduce((a, x) => a + x.amount, 0);
+  const tracePct = Math.round(traceCovered / (win.v || 1) * 100);
+
+  /* --- the climax moment, if it moved the winner --- */
+  const amp = amplifications.filter(a => a.family.includes(win.k)).pop();
+  const ampLine = amp
+    ? `<p class="amp-line">Then you answered <b>${esc(amp.label)}</b> — and everything you had
+       already gathered toward ${types[win.k].name} grew by half again.</p>`
+    : '';
+
+  const sharedLabels = sharedBetween(win.k, runner.k);
+  const sharedLine = sharedLabels.length
+    ? `<p class="shared-line"><b>${types[runner.k].name}</b> stayed close because
+       ${sharedLabels.length === 1 ? 'one choice fed both' : sharedLabels.length + ' of your choices fed both'}:
+       ${sharedLabels.slice(0, 3).map(l => '“' + esc(l) + '”').join(', ')}.</p>`
+    : '';
+
+  /* --- sidebar: the whole constellation, relative to your strongest --- */
   $('#scoreMask').classList.add('hidden');
   $('#scores').classList.remove('hidden');
-  $('#scores').innerHTML = ranked.slice(0, 6).map(x =>
-    '<div class="score"><span>' + types[x.k].name + '</span>' +
-    '<div class="line"><i style="width:' + Math.min(100, x.pct * 3) + '%"></i></div>' +
-    '<b>' + x.pct + '%</b></div>').join('');
+  const max = win.v || 1;
+  $('#scores').innerHTML = ranked.map(x =>
+    '<div class="score' + (x.v === 0 ? ' faint' : '') + '"><span>' + types[x.k].name + '</span>' +
+    '<div class="line"><i style="width:' + Math.round(x.v / max * 100) + '%"></i></div>' +
+    '<b>' + Math.round(x.v / max * 100) + '</b></div>').join('');
 
   setProgress(100, 'Affinity revealed');
-
   $('#eggCardTitle').textContent = 'Resonance revealed.';
-  $('#eggCardBody').textContent  = 'Your top three are ready below.';
+  $('#eggCardBody').textContent  = 'Bars below are relative to your strongest egg.';
   eggminiEl.innerHTML =
-    '<img src="' + types[top[0].k].img + '" alt="The ' + types[top[0].k].name + ' egg">' +
-    '<div><b>' + types[top[0].k].name + '</b><small>' + types[top[0].k].tag + '</small></div>';
+    '<img src="' + types[win.k].img + '" alt="The ' + types[win.k].name + ' egg">' +
+    '<div><b>' + types[win.k].name + '</b><small>your strongest</small></div>';
 
   playEl.innerHTML = '';
   resultEl.classList.add('show');
   resultEl.innerHTML =
     '<div class="eyebrow">Your pocket dragon resonance</div>' +
     '<h2>The shell knows your shape.</h2>' +
-    '<p>There is no single answer hiding inside you. These are the three affinities your choices ' +
-    'called forward most often. Each figure is that egg’s share of all sixteen affinities, so the ' +
-    'three will not add up to 100%.</p>' +
+    '<p>No single egg holds all of you. These three answered loudest, and the figures are how ' +
+    'your resonance divides between them.</p>' +
     '<div class="top-three">' + top.map((x, i) =>
-      '<article class="eggcard"><span class="pct">' + x.pct + '%</span>' +
+      '<article class="eggcard"><span class="pct">' + x.blend + '%</span>' +
       '<img src="' + types[x.k].img + '" alt="The ' + types[x.k].name + ' egg">' +
       '<div><b>' + (i + 1) + '. ' + types[x.k].name + '</b>' +
-      '<small>' + types[x.k].tag + ' · ' + x.v + ' resonance</small></div></article>').join('') +
+      '<small>' + Math.round(x.v * 10) / 10 + ' resonance</small></div></article>').join('') +
     '</div>' +
+    closeness +
+    '<section class="why"><h3>Why ' + types[win.k].name + '</h3>' +
+      '<p>These choices built it — the number is what each one is worth after everything that ' +
+      'followed. Together they are ' + tracePct + '% of your ' + types[win.k].name + ' resonance.</p>' +
+      '<ol class="trace">' + traceRows + '</ol>' +
+      ampLine + sharedLine +
+    '</section>' +
     '<div class="actions">' +
       '<button class="primary" id="again">Begin another choosing</button>' +
       '<button class="ghost" id="showJourney">Review your journey</button>' +
@@ -514,17 +628,23 @@ function reveal() {
 }
 
 function review() {
+  const win = ranking()[0].k;
   playEl.innerHTML = '';
   resultEl.classList.add('show');
   $('#stepLabel').textContent = 'Journey reviewed';
   resultEl.innerHTML =
     '<div class="eyebrow">Your path through the keep</div>' +
     '<h2>Every choice you carried.</h2>' +
-    '<p>This is the route your egg witnessed. The choices shaped the resonance, but none of them ' +
-    'were right or wrong.</p>' +
-    '<div class="review-list">' + history.map((h, i) =>
-      '<div class="review-row"><span>' + String(i + 1).padStart(2, '0') + '</span>' +
-      '<div><small>' + scenes[h.node].eyebrow + '</small><b>' + h.label + '</b></div></div>').join('') +
+    '<p>The figure beside each step is what it contributed to ' + types[win].name +
+    ', counted after every amplification that followed it. Steps that gave nothing to ' +
+    types[win].name + ' still shaped the rest of your constellation.</p>' +
+    '<div class="review-list">' + history.map((h, i) => {
+      const amt = h.gave[win] || 0;
+      return '<div class="review-row' + (amt > 0 ? ' fed' : '') + '">' +
+        '<span>' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<div><small>' + esc(scenes[h.node].eyebrow) + '</small><b>' + esc(h.label) + '</b></div>' +
+        '<em>' + (amt > 0 ? '+' + (Math.round(amt * 10) / 10) : '—') + '</em></div>';
+    }).join('') +
     '</div>' +
     '<div class="actions">' +
       '<button class="primary" id="backReveal">Return to affinity reveal</button>' +

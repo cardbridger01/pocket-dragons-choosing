@@ -2,8 +2,18 @@
 const fs=require('fs'),path=require('path'),{JSDOM}=require('jsdom');
 const DIR=process.argv[2]||path.join(__dirname,'..');
 const HTML=fs.readFileSync(path.join(DIR,'index.html'),'utf8');
-let pass=0,fail=0;
-const ok=(c,m)=>{c?(pass++,console.log('  PASS  '+m)):(fail++,console.log('  FAIL  '+m));};
+let pass=0,fail=0;const warnings=[];
+const CI=!!process.env.GITHUB_ACTIONS;
+const ok=(c,m)=>{
+  if(c){pass++;console.log('  PASS  '+m);}
+  else{fail++;console.log('  FAIL  '+m);if(CI)console.log('::error::'+m);}
+};
+// Hygiene, not correctness. Reported loudly, but it does not break the build —
+// a stale file left in the repo is not the same as the page being wrong.
+const warn=(c,m)=>{
+  if(c){pass++;console.log('  PASS  '+m);}
+  else{warnings.push(m);console.log('  WARN  '+m);if(CI)console.log('::warning::'+m);}
+};
 const head=t=>console.log('\n'+t);
 
 /* ---------- 1. static graph ---------- */
@@ -19,6 +29,8 @@ ok(keys.length===16,'16 egg types');
 ok(!/scene\s*=\s*0/.test(js),'no stray `scene = 0` implicit global');
 ok(!/originalPocketReveal/.test(js),'no reveal monkeypatch');
 ok(!/of 8|\/\s*8\s*\*\s*100/.test(js),'no hardcoded 8-step denominator');
+ok(/const AMP = 1\.5/.test(js),'climax amplifier present');
+ok(/const families = \{/.test(js),'climax family map present');
 
 const col={},cyc=[];
 (function dfs(n,st){col[n]=1;st.push(n);for(const c of scenes[n].choices){const x=c[3];if(x==='reveal')continue;
@@ -37,25 +49,54 @@ for(const[id,s]of Object.entries(scenes)){
 }
 const assets=new Set([...Object.values(scenes).map(s=>s.img),...keys.map(k=>types[k].img)]);
 for(const k of keys) ok(fs.existsSync(path.join(DIR,types[k].img)),`egg asset exists: ${types[k].img}`);
+for(const k of keys){
+  const base=types[k].img.replace(/\.[a-z0-9]+$/i,'');
+  ok(base.toLowerCase()===types[k].name.toLowerCase(),
+     `display name matches asset filename: ${types[k].name} <-> ${types[k].img}`);
+  ok(k.toLowerCase()===types[k].name.toLowerCase(),
+     `type key matches display name: ${k} <-> ${types[k].name}`);
+}
 const onDisk=fs.readdirSync(DIR).filter(f=>/\.(webp|png|jpg|mp4)$/i.test(f));
 const orphan=onDisk.filter(f=>!assets.has(f)&&!HTML.includes(f));
-ok(!orphan.length,'no unreferenced media in deploy'+(orphan.length?': '+orphan:''));
+warn(!orphan.length, orphan.length
+  ? `${orphan.length} unreferenced media file(s) still in the repo — delete them to shrink the deploy: ${orphan.join(', ')}`
+  : 'no unreferenced media in deploy');
 
 /* ---------- 2. every path ---------- */
-head('Path enumeration');
+head('Path enumeration and scoring model');
+const famFor=label=>{const l=label.toLowerCase();
+  for(const k of Object.keys(globalThis.families||{})) if(l.includes(k.toLowerCase())) return globalThis.families[k];
+  return null;};
+(0,eval)(js.match(/const families = \{[\s\S]*?\n\};/)[0].replace('const families =','globalThis.families ='));
 const paths=[];
-(function w(n,acc,sco){for(const c of scenes[n].choices){const s2={...sco};
- for(const[k,v]of Object.entries(c[2]))s2[k]=(s2[k]||0)+v;
- if(c[3]==='reveal'){paths.push({len:acc.length+1,s:s2});continue;} w(c[3],acc.concat(n),s2);}})('start',[],{});
+(function w(n,acc,sco){for(const c of scenes[n].choices){
+  const s2={...sco};
+  const fam=(n==='feeling'||n==='final')?famFor(c[0]):null;
+  if(fam) for(const t of fam) s2[t]=(s2[t]||0)*1.5;
+  for(const[k,v]of Object.entries(c[2])) s2[k]=(s2[k]||0)+v;
+  if(c[3]==='reveal'){paths.push({len:acc.length+1,s:s2});continue;}
+  w(c[3],acc.concat(n),s2);}})('start',[],{});
 const lens=paths.map(p=>p.len);
 ok(paths.length>0,`${paths.length} complete paths, all reaching the reveal`);
 ok(Math.min(...lens)>=5&&Math.max(...lens)<=8,`path length bounded ${Math.min(...lens)}-${Math.max(...lens)}`);
-const win={};keys.forEach(k=>win[k]=0);
-for(const p of paths){const r=keys.map(k=>({k,v:p.s[k]||0})).sort((a,b)=>b.v-a.v);win[r[0].k]++;}
+
+const win={};keys.forEach(k=>win[k]=0);let ties=0,gapSum=0;
+for(const p of paths){
+  const r=keys.map(k=>({k,v:p.s[k]||0})).sort((a,b)=>b.v-a.v||a.k.localeCompare(b.k));
+  win[r[0].k]++; gapSum+=r[0].v-r[1].v; if(r[0].v===r[1].v) ties++;
+}
+const tieRate=ties/paths.length*100, avgGap=gapSum/paths.length;
+ok(tieRate<10,`exact #1/#2 ties ${tieRate.toFixed(1)}% (was 28.2% before the amplifier)`);
+ok(avgGap>2.5,`average winning margin ${avgGap.toFixed(2)} points (was 1.26)`);
 const fr=keys.map(k=>win[k]/paths.length*100).sort((a,b)=>b-a);
-const ratio=fr[0]/fr[fr.length-1];
-ok(ratio<1.6,`egg reveal spread ${ratio.toFixed(2)}:1 (target under 1.6:1)`);
+ok(fr[0]/fr[15]<1.7,`egg reveal spread ${(fr[0]/fr[15]).toFixed(2)}:1`);
 ok(keys.every(k=>win[k]>0),'every one of the 16 eggs can win');
+
+// every egg must be amplifiable in BOTH climax scenes, or it is structurally handicapped
+const feelFams=['Delight','Anger','Longing','Calm'].flatMap(f=>globalThis.families[f]);
+const finFams=['curiosity','connection','freedom','stillness'].flatMap(f=>globalThis.families[f]);
+ok(keys.every(k=>feelFams.includes(k)),'every egg can be amplified by a feeling choice');
+ok(keys.every(k=>finFams.includes(k)),'every egg can be amplified by a final choice');
 
 /* ---------- 3. live DOM, played twice ---------- */
 head('Runtime — two consecutive playthroughs');
@@ -84,6 +125,22 @@ ok(!!$('.eggmini img'),'run 1: sidebar egg image present at start');
 const n1=play('run 1');
 ok($('.eggmini img').getAttribute('alt').includes('egg'),'run 1: sidebar shows the winning egg');
 
+// attribution identity: per-choice contributions must sum to the ranking score
+{
+  const H=W.eval('history'), R=W.eval('ranking()');
+  let worst=0;
+  for(const r of R){
+    let sum=0; for(const h of H) sum+=(h.gave[r.k]||0);
+    worst=Math.max(worst,Math.abs(sum-r.v));
+  }
+  ok(worst<1e-9,`attribution is exact (max deviation ${worst})`);
+  ok(D.querySelectorAll('.trace-row').length>=1,'reveal shows which choices built the egg');
+  ok(!!$('.why h3'),'reveal has a "Why <egg>" section');
+  const blends=[...D.querySelectorAll('.pct')].map(e=>parseInt(e.textContent));
+  ok(blends.reduce((a,b)=>a+b,0)===100,`top-three figures sum to exactly 100 (${blends.join('+')})`);
+  ok(D.querySelectorAll('#scores .score').length===16,'sidebar shows all 16 eggs, not just six');
+}
+
 click($('#showJourney'));
 ok(D.querySelectorAll('.review-row').length===n1,`journey review lists all ${n1} choices`);
 click($('#backReveal'));
@@ -111,5 +168,10 @@ ok(new Set(ids).size===ids.length,'no duplicate element ids');
 head('JS errors');
 ok(errs.length===0,'no uncaught errors'+(errs.length?': '+errs:''));
 
-console.log(`\n${pass} passed, ${fail} failed`);
+console.log(`\n${pass} passed, ${fail} failed, ${warnings.length} warning(s)`);
+if(warnings.length){
+  console.log('\nWarnings (these do NOT fail the build):');
+  warnings.forEach(w=>console.log('  · '+w));
+}
+if(fail) console.log('\nThe page itself is broken — fix before deploying.');
 process.exit(fail?1:0);

@@ -6,18 +6,38 @@ opens it locally on Windows; it is not needed for the hosted version.
 ## The prototype
 
 Fourteen scenes, sixteen egg affinities. Each choice routes the player to a
-different next scene while contributing weighted resonance to one or more egg
-types. Routes converge on different kinds of emotional tests, so the same step
-can feel different depending on what the player did earlier. The reveal ranks the
-top three and shows each as that egg's share of all sixteen affinities — the
-three do not sum to 100%, by design.
+different next scene while contributing weighted resonance (5/3/1) to three egg
+types.
+
+The last two scenes work differently. Instead of adding a fixed handful of
+points, they **amplify what the player has already gathered** — answering
+"Anger" scales up whatever heat you'd accumulated, "Calm" scales up your
+stillness. This is why the ending feels decisive without narrowing the outcome:
+multiplying your own profile can't bottleneck the way adding fixed points to a
+fixed subset of eggs does. It also matches what the prose already implies —
+"tell us what you carried here" should interpret the journey, not contribute
+to it.
+
+The reveal shows the top three as a blend summing to 100%, the full sixteen-egg
+constellation relative to the strongest, and — the point of the whole thing —
+**which specific choices built the winning egg**. Every contribution is tracked
+as what that choice is worth *after* every amplification that followed it, so
+the listed figures sum exactly to the score. Nothing on the reveal is
+approximate.
+
+The affinity groupings and egg readings are one fan's interpretation, not
+official Pocket Dragons material.
 
 Verified properties of the graph:
 
 - 14 scenes, 1,584 complete paths, every one reaching the reveal
 - No cycles; path length is bounded between 5 and 8 choices
 - No scene unreachable, no dead links, no orphaned assets
-- Reveal frequency spread across the sixteen eggs is 1.26 : 1 (max/min)
+- Reveal frequency spread across the sixteen eggs is 1.40 : 1 (max/min)
+- #1 and #2 tie in 6.3% of paths (was 28.2% before the amplifier)
+- Average winning margin 3.63 points (was 1.26)
+- Attribution is mathematically exact on all 1,584 paths
+- Every display name matches its art label and asset filename
 
 ## Deploying to Render
 
