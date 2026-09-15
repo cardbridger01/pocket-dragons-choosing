@@ -705,16 +705,17 @@ function shareButton(top) {
      static og:image. So each result gets its own tiny stub page under /r/, each
      carrying its own egg card, and each bouncing a human straight back here.
 
-     Ordering matters: X builds the card from the LAST link in the post. Verified
-     the hard way, by removing the pocketdragons.io mention and watching the egg
-     card appear. So the result link goes at the very end, after the official-site
-     line. The link is written inline rather than passed as the intent's `url`
-     parameter, because inline is the only way to control what follows it. */
+     The post carries exactly ONE link, and it has to stay that way. With a
+     pocketdragons.io URL in the text as well, X picked that domain over this one
+     every time, first or last, and showed their card instead of the egg. Tested
+     both orderings. An @mention is not a link, so it credits them and points
+     people their way without ever competing for the preview card. */
+  const OFFICIAL_HANDLE = '@pocket_dragons_';
   const slug = types[top[0].k].name.toLowerCase().replace(/[^a-z0-9]/g, '');
   const link = shareTarget().replace(/[^/]*$/, '') + 'r/' + slug + '.html';
   const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
                `close behind.\n\n` +
-               `Don't have your official egg and keeper card yet? pocketdragons.io\n\n` +
+               `Don't have your official egg and keeper card yet? ${OFFICIAL_HANDLE}\n\n` +
                `Which one answers you?\n${link}`;
   const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text);
   return '<a class="share" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
