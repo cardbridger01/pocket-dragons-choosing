@@ -644,7 +644,7 @@ function reveal() {
   const slot = $('#shareSlot');
   slot.classList.remove('hidden');
   slot.innerHTML = '<div class="eyebrow">Tell someone</div>' + shareButton(top) +
-    '<p>Your three eggs travel with the link.</p>';
+    '<p>The post names all three. The picture is ' + types[top[0].k].name + '.</p>';
 
   setProgress(100, 'Affinity revealed');
   $('#eggCardTitle').textContent = 'Resonance revealed.';
@@ -700,16 +700,22 @@ const shareTarget = () =>
 
 function shareButton(top) {
   const n = top.map(x => types[x.k].name);
-  const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
-               `close behind.\n\nWhich one answers you?\n\n` +
-               `Don't have your official egg and keeper card yet? pocketdragons.io`;
   /* X cannot take an image from a share button. The picture in a post comes from
-     the link preview, which X builds by crawling the shared URL and reading its
+     the link preview, which X builds by crawling a URL in the post and reading its
      static og:image. So each result gets its own tiny stub page under /r/, each
-     carrying its own egg card, and each bouncing a human straight back here. */
+     carrying its own egg card, and each bouncing a human straight back here.
+
+     Ordering matters: X builds the card from the FIRST link it finds, so our stub
+     has to appear before the pocketdragons.io mention or that one wins the preview.
+     The intent's own `url` parameter always lands last, after the text, which is
+     exactly the wrong place. So the link goes inline in the text instead and the
+     `url` parameter is left off entirely. */
   const slug = types[top[0].k].name.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) +
-               '&url=' + encodeURIComponent(shareTarget().replace(/[^/]*$/, '') + 'r/' + slug + '.html');
+  const link = shareTarget().replace(/[^/]*$/, '') + 'r/' + slug + '.html';
+  const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
+               `close behind.\n\nWhich one answers you?\n${link}\n\n` +
+               `Don't have your official egg and keeper card yet? pocketdragons.io`;
+  const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text);
   return '<a class="share" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.2h3.7l-8.1 9.2 9.5 12.5h-7.4' +
     'l-5.8-7.6-6.7 7.6H.4l8.6-9.8L0 1.2h7.6l5.2 6.9ZM17.6 20.7h2L6.5 3.2H4.3Z"/></svg>' +

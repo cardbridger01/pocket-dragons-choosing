@@ -4,15 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pocket Dragons · The Choosing · Speed</title>
-<meta name="robots" content="noindex">
-<!-- A share stub. X reads the tags below to build the preview card. A human
-     following the link is sent straight on to the game. -->
+<!-- A share stub. X reads the tags below to build the preview card.
+
+     Deliberately absent, because each one stops the card from rendering:
+       meta refresh   a crawler follows it and reads index.html's card instead
+       canonical to / tells the crawler this page is really the home page
+       robots noindex can suppress card generation altogether
+     The redirect below is JavaScript only. Crawlers do not run it, so they stay
+     here and read these tags. A person is sent straight on to the game, and a
+     person without JavaScript gets the link in the body. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pocket Dragons · The Choosing">
 <meta property="og:title" content="The shell answered Speed.">
 <meta property="og:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
 <meta property="og:url" content="https://pocket-dragons-choosing.onrender.com/r/speed.html">
 <meta property="og:image" content="https://pocket-dragons-choosing.onrender.com/r/card-speed.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Speed dragon egg under glass in a torchlit chamber">
@@ -20,8 +27,8 @@
 <meta name="twitter:title" content="The shell answered Speed.">
 <meta name="twitter:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
 <meta name="twitter:image" content="https://pocket-dragons-choosing.onrender.com/r/card-speed.jpg">
-<meta http-equiv="refresh" content="0; url=../index.html">
-<link rel="canonical" href="https://pocket-dragons-choosing.onrender.com/">
+<meta name="twitter:image:alt" content="The Speed dragon egg under glass in a torchlit chamber">
+<link rel="canonical" href="https://pocket-dragons-choosing.onrender.com/r/speed.html">
 <style>body{margin:0;background:#080d16;color:#f8edda;font:15px/1.6 system-ui,sans-serif;
 display:grid;place-items:center;min-height:100vh;text-align:center;padding:24px}a{color:#ffcf7e}</style>
 </head>

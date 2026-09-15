@@ -171,11 +171,17 @@ head('Sharing and attribution');
   if(a){
     const u=new URL(a.href);
     const text=u.searchParams.get('text')||'';
-    ok(text.length>0 && text.length<=240,`tweet text fits (${text.length} chars)`);
-    // http is legitimate here: the harness serves over localhost. What matters is
-    // that the link is absolute, not that it is TLS in a test rig.
-    const back=u.searchParams.get('url')||'';
-    ok(/^https?:\/\/[^/]+/.test(back),'share carries an absolute link back to the site ('+back+')');
+    // X builds the preview card from the FIRST link in the post, so ours must
+    // come before the pocketdragons.io mention. The intent's own `url` parameter
+    // always lands last, which is why it is deliberately unused.
+    ok(!u.searchParams.get('url'),'no trailing url parameter (it would land after our link)');
+    const links=text.match(/https?:\/\/\S+|\b[a-z0-9-]+\.(?:io|com|net|org)\b/gi)||[];
+    ok(links.length>0 && /\/r\/[a-z0-9]+\.html/.test(links[0]),
+       'our result link comes first in the post, so it wins the preview card');
+    ok(links.some(l=>/pocketdragons\.io/i.test(l)),'post still points at the official site');
+    // X weights every link as 23 characters
+    const weighted=text.replace(/https?:\/\/\S+/g,'x'.repeat(23)).length;
+    ok(weighted<=280,`post fits X's limit (${weighted}/280 with link weighting)`);
   }
   const off=$('.official a');
   ok(!!off,'reveal links to the official site');
@@ -203,7 +209,7 @@ head('Per-result share stubs');
   const dir=path.join(DIR,'r');
   ok(fs.existsSync(dir),'/r/ share-stub directory exists');
   if(fs.existsSync(dir)){
-    let missing=[],badImg=[],noRedirect=[];
+    let missing=[],badImg=[],noRedirect=[],hostile=[];
     for(const k of keys){
       const slug=types[k].name.toLowerCase().replace(/[^a-z0-9]/g,'');
       const page=path.join(dir,slug+'.html'), card=path.join(dir,'card-'+slug+'.jpg');
@@ -211,11 +217,17 @@ head('Per-result share stubs');
       const h=fs.readFileSync(page,'utf8');
       const m=h.match(/property="og:image" content="([^"]+)"/);
       if(!m||!m[1].endsWith('/r/card-'+slug+'.jpg')||!/^https:\/\//.test(m[1])) badImg.push(slug);
-      if(!/location\.replace|http-equiv="refresh"/.test(h)) noRedirect.push(slug);
+      if(!/location\.replace/.test(h)) noRedirect.push(slug);
+      // these three each stop X from building the card; they must stay out
+      if(/http-equiv="refresh"/i.test(h)) hostile.push(slug+' (meta refresh)');
+      if(/name="robots"[^>]*noindex/i.test(h)) hostile.push(slug+' (noindex)');
+      const can=(h.match(/rel="canonical" href="([^"]+)"/)||[])[1];
+      if(can && !can.endsWith('/r/'+slug+'.html')) hostile.push(slug+' (canonical points away)');
     }
     ok(!missing.length,'every egg has a stub page and a card'+(missing.length?': missing '+missing:''));
     ok(!badImg.length,'every stub points at its own absolute card image'+(badImg.length?': '+badImg:''));
-    ok(!noRedirect.length,'every stub sends a human on to the game'+(noRedirect.length?': '+noRedirect:''));
+    ok(!noRedirect.length,'every stub sends a human on to the game with JS only'+(noRedirect.length?': '+noRedirect:''));
+    ok(!hostile.length,'no stub carries a tag that would kill its preview card'+(hostile.length?': '+hostile:''));
     const origins=new Set();
     for(const k of keys){
       const slug=types[k].name.toLowerCase().replace(/[^a-z0-9]/g,'');
@@ -233,8 +245,9 @@ head('Per-result share stubs');
 {
   const egg=$('.eggcard b').textContent.replace(/^\d+\.\s*/,'');
   const slug=egg.toLowerCase().replace(/[^a-z0-9]/g,'');
-  const u=new URL($('.share').href).searchParams.get('url')||'';
-  ok(u.endsWith('/r/'+slug+'.html'),`share links to this result's stub (${egg} -> ${u.split('/').pop()})`);
+  const shareText=new URL($('.share').href).searchParams.get('text')||'';
+  const stub=(shareText.match(/https?:\/\/\S*\/r\/[a-z0-9]+\.html/)||[''])[0];
+  ok(stub.endsWith('/r/'+slug+'.html'),`share links to this result's stub (${egg} -> ${stub.split('/').pop()||'none'})`);
   ok(!!$('#shareSlot .share'),'share button sits in the sidebar');
 }
 
