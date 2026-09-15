@@ -4,15 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pocket Dragons · The Choosing · Light</title>
-<!-- A share stub. X reads the tags below to build the preview card.
-
-     Deliberately absent, because each one stops the card from rendering:
-       meta refresh   a crawler follows it and reads index.html's card instead
-       canonical to / tells the crawler this page is really the home page
-       robots noindex can suppress card generation altogether
-     The redirect below is JavaScript only. Crawlers do not run it, so they stay
-     here and read these tags. A person is sent straight on to the game, and a
-     person without JavaScript gets the link in the body. -->
+<meta name="description" content="The shell answered Light. Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<link rel="icon" href="data:,">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pocket Dragons · The Choosing">
 <meta property="og:title" content="The shell answered Light.">
@@ -29,12 +22,34 @@
 <meta name="twitter:image" content="https://pocket-dragons-choosing.onrender.com/r/card-light.jpg">
 <meta name="twitter:image:alt" content="The Light dragon egg under glass in a torchlit chamber">
 <link rel="canonical" href="https://pocket-dragons-choosing.onrender.com/r/light.html">
-<style>body{margin:0;background:#080d16;color:#f8edda;font:15px/1.6 system-ui,sans-serif;
-display:grid;place-items:center;min-height:100vh;text-align:center;padding:24px}a{color:#ffcf7e}</style>
+<style>
+:root{--ink:#f8edda;--muted:#b3adac;--gold:#f2b85c}
+*{box-sizing:border-box}
+body{margin:0;background:#080d16;color:var(--ink);font:15px/1.6 system-ui,sans-serif;
+display:grid;place-items:center;min-height:100vh;padding:28px}
+.wrap{max-width:430px;text-align:center}
+.eyebrow{font-size:10px;letter-spacing:3px;color:#efb85e;text-transform:uppercase}
+h1{font:34px Georgia,serif;margin:8px 0 14px;line-height:1.2}
+img{width:200px;max-width:62%;border-radius:12px;border:1px solid #636073;
+box-shadow:0 14px 42px #0009;display:block;margin:0 auto 20px}
+p{color:var(--muted);margin:0 0 22px}
+.cta{display:inline-block;background:linear-gradient(110deg,#e1a04b,#f4c771);color:#1c1820;
+text-decoration:none;border-radius:8px;padding:13px 22px;font-weight:700}
+.cta:hover{filter:brightness(1.08)}
+.rights{margin:26px 0 0;color:#6f7885;font-size:11px;line-height:1.55}
+.rights a{color:#c69a54}
+</style>
 </head>
 <body>
-<div><p>The shell answered Light.</p>
-<p><a href="../index.html">Walk the keep and find out which egg answers you.</a></p></div>
-<script>location.replace('../index.html');</script>
+<main class="wrap">
+  <div class="eyebrow">Pocket Dragons · The Choosing</div>
+  <h1>The shell answered Light.</h1>
+  <img src="../Light.webp" alt="The Light dragon egg under glass in a torchlit chamber">
+  <p>Sixteen eggs are listening. Walk the keep and find out which one answers you.</p>
+  <a class="cta" href="../index.html">Begin your choosing</a>
+  <p class="rights">All images property of PocketDragons.io.
+    The Choosing is a fan-made page and is not affiliated with or endorsed by Pocket Dragons.<br>
+    <a href="https://pocketdragons.io" rel="noopener">Become a keeper at pocketdragons.io</a></p>
+</main>
 </body>
 </html>
