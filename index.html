@@ -96,6 +96,10 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
 .actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}
 .primary{background:linear-gradient(110deg,#e1a04b,#f4c771);color:#1c1820;border:0;border-radius:7px;padding:11px 17px;font-weight:700}
 .primary:hover{filter:brightness(1.1)}
+.share-card{text-align:center}
+.share-card .eyebrow{margin-bottom:9px}
+.share-card .share{width:100%;justify-content:center}
+.share-card p{margin:9px 0 0;font-size:11px;color:#8e97a3;line-height:1.5}
 .share{display:inline-flex;align-items:center;gap:8px;background:#e8e8ea;color:#15151a;border:0;border-radius:7px;padding:11px 16px;font-weight:700;text-decoration:none}
 .share:hover{background:#fff}
 .share svg{width:14px;height:14px;fill:currentColor}
@@ -164,6 +168,7 @@ main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
         <p id="eggCardBody">Keep going. It is learning the shape of your attention.</p>
         <div class="eggmini" id="eggmini"></div>
       </div>
+      <div class="card share-card hidden" id="shareSlot"></div>
       <div class="card">
         <div class="eyebrow">Resonance</div>
         <p class="score-mask" id="scoreMask">Your resonance is sealed.<br>Make your final choice to reveal the eggs listening most closely.</p>
@@ -527,6 +532,8 @@ function reset() {
   $('#eggCardBody').textContent  = EGG_CARD_PRISTINE.body;
   $('#tip').textContent = EGG_CARD_PRISTINE.tip;
   eggminiEl.innerHTML = EGG_CARD_PRISTINE.mini;
+  $('#shareSlot').classList.add('hidden');
+  $('#shareSlot').innerHTML = '';
   render();
 }
 
@@ -634,6 +641,11 @@ function reveal() {
     '<div class="line"><i style="width:' + Math.round(x.v / max * 100) + '%"></i></div>' +
     '</div>').join('');
 
+  const slot = $('#shareSlot');
+  slot.classList.remove('hidden');
+  slot.innerHTML = '<div class="eyebrow">Tell someone</div>' + shareButton(top) +
+    '<p>Your three eggs travel with the link.</p>';
+
   setProgress(100, 'Affinity revealed');
   $('#eggCardTitle').textContent = 'Resonance revealed.';
   $('#eggCardBody').textContent  = 'Every egg that answered, set against the loudest of them.';
@@ -667,7 +679,6 @@ function reveal() {
       ampLine + sharedLine +
     '</section>' +
     '<div class="actions">' +
-      shareButton(top) +
       '<button class="primary" id="again">Begin another choosing</button>' +
       '<button class="ghost" id="showJourney">Review your journey</button>' +
     '</div>' +
@@ -690,9 +701,15 @@ const shareTarget = () =>
 function shareButton(top) {
   const n = top.map(x => types[x.k].name);
   const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
-               `close behind.\n\nWhich one answers you?`;
+               `close behind.\n\nWhich one answers you?\n\n` +
+               `Don't have your official egg and keeper card yet? pocketdragons.io`;
+  /* X cannot take an image from a share button. The picture in a post comes from
+     the link preview, which X builds by crawling the shared URL and reading its
+     static og:image. So each result gets its own tiny stub page under /r/, each
+     carrying its own egg card, and each bouncing a human straight back here. */
+  const slug = types[top[0].k].name.toLowerCase().replace(/[^a-z0-9]/g, '');
   const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text) +
-               '&url=' + encodeURIComponent(shareTarget());
+               '&url=' + encodeURIComponent(shareTarget().replace(/[^/]*$/, '') + 'r/' + slug + '.html');
   return '<a class="share" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.2h3.7l-8.1 9.2 9.5 12.5h-7.4' +
     'l-5.8-7.6-6.7 7.6H.4l8.6-9.8L0 1.2h7.6l5.2 6.9ZM17.6 20.7h2L6.5 3.2H4.3Z"/></svg>' +

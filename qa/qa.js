@@ -56,8 +56,15 @@ for(const k of keys){
   ok(k.toLowerCase()===types[k].name.toLowerCase(),
      `type key matches display name: ${k} <-> ${types[k].name}`);
 }
-const onDisk=fs.readdirSync(DIR).filter(f=>/\.(webp|png|jpg|mp4)$/i.test(f));
-const orphan=onDisk.filter(f=>!assets.has(f)&&!HTML.includes(f));
+const stubHTML=fs.existsSync(path.join(DIR,'r'))
+  ? fs.readdirSync(path.join(DIR,'r')).filter(f=>f.endsWith('.html'))
+      .map(f=>fs.readFileSync(path.join(DIR,'r',f),'utf8')).join('\n')
+  : '';
+const allText=HTML+'\n'+stubHTML;
+const onDisk=[...fs.readdirSync(DIR).filter(f=>/\.(webp|png|jpg|mp4)$/i.test(f)),
+  ...(fs.existsSync(path.join(DIR,'r'))?fs.readdirSync(path.join(DIR,'r'))
+      .filter(f=>/\.(webp|png|jpg|mp4)$/i.test(f)).map(f=>'r/'+f):[])];
+const orphan=onDisk.filter(f=>!assets.has(f)&&!allText.includes(f.split('/').pop()));
 warn(!orphan.length, orphan.length
   ? `${orphan.length} unreferenced media file(s) still in the repo. Delete them to shrink the deploy: ${orphan.join(', ')}`
   : 'no unreferenced media in deploy');
@@ -189,6 +196,46 @@ head('Sharing and attribution');
   ok(host(meta('og:image'))===host(meta('og:url')),'og:image and og:url share one origin');
   const img=meta('og:image').split('/').pop();
   ok(fs.existsSync(path.join(DIR,img)),'share card image exists in the deploy: '+img);
+}
+
+head('Per-result share stubs');
+{
+  const dir=path.join(DIR,'r');
+  ok(fs.existsSync(dir),'/r/ share-stub directory exists');
+  if(fs.existsSync(dir)){
+    let missing=[],badImg=[],noRedirect=[];
+    for(const k of keys){
+      const slug=types[k].name.toLowerCase().replace(/[^a-z0-9]/g,'');
+      const page=path.join(dir,slug+'.html'), card=path.join(dir,'card-'+slug+'.jpg');
+      if(!fs.existsSync(page)||!fs.existsSync(card)){missing.push(slug);continue;}
+      const h=fs.readFileSync(page,'utf8');
+      const m=h.match(/property="og:image" content="([^"]+)"/);
+      if(!m||!m[1].endsWith('/r/card-'+slug+'.jpg')||!/^https:\/\//.test(m[1])) badImg.push(slug);
+      if(!/location\.replace|http-equiv="refresh"/.test(h)) noRedirect.push(slug);
+    }
+    ok(!missing.length,'every egg has a stub page and a card'+(missing.length?': missing '+missing:''));
+    ok(!badImg.length,'every stub points at its own absolute card image'+(badImg.length?': '+badImg:''));
+    ok(!noRedirect.length,'every stub sends a human on to the game'+(noRedirect.length?': '+noRedirect:''));
+    const origins=new Set();
+    for(const k of keys){
+      const slug=types[k].name.toLowerCase().replace(/[^a-z0-9]/g,'');
+      const f=path.join(dir,slug+'.html');
+      if(!fs.existsSync(f))continue;
+      const m=fs.readFileSync(f,'utf8').match(/property="og:image" content="(https:\/\/[^/]+)/);
+      if(m)origins.add(m[1]);
+    }
+    const rootOrigin=(HTML.match(/property="og:image" content="(https:\/\/[^/]+)/)||[])[1];
+    ok(origins.size===1&&[...origins][0]===rootOrigin,
+      'stub cards and the home page agree on one origin'+(origins.size!==1?': '+[...origins]:''));
+  }
+}
+// the share button must point at the stub for the egg actually shown
+{
+  const egg=$('.eggcard b').textContent.replace(/^\d+\.\s*/,'');
+  const slug=egg.toLowerCase().replace(/[^a-z0-9]/g,'');
+  const u=new URL($('.share').href).searchParams.get('url')||'';
+  ok(u.endsWith('/r/'+slug+'.html'),`share links to this result's stub (${egg} -> ${u.split('/').pop()})`);
+  ok(!!$('#shareSlot .share'),'share button sits in the sidebar');
 }
 
 head('Accessibility');

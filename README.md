@@ -42,13 +42,25 @@ Verified properties of the graph:
 ## Sharing
 
 The reveal carries a share button that opens an X post intent with the player's
-top three and a link back to the site. X builds the link preview from the
-`og:` and `twitter:` meta tags at the top of `index.html`, and it reads those
-from static HTML, so **the two absolute URLs there must match wherever the site
-actually lives**. They currently point at `pocket-dragons-choosing.onrender.com`.
-Change both if you move to a custom domain, or the preview card will point at
-the wrong host. `share-card.jpg` is a 1200x630 crop built for that card, because
-X renders previews at 1.91:1 and would otherwise crop the 3:1 banner.
+top three and a link back to the site. X cannot accept an image from a share button. The picture in a post comes from
+the link preview, which X builds by crawling the shared URL and reading its
+static `og:image`. One URL means one image for everybody.
+
+So each egg gets its own URL. `/r/<egg>.html` is a stub carrying that egg's own
+card in its meta tags, and a redirect that sends any human straight on to the
+game. The share button links to the stub for the egg the player actually drew,
+so a Water result posts the Water card and a Shadow result posts the Shadow one.
+Sixteen stubs, sixteen cards, about 900 KB in total.
+
+**All of these URLs are absolute and hardcoded**, because a crawler never runs
+JavaScript. They point at `pocket-dragons-choosing.onrender.com`. If the site
+moves, rewrite them: the two in `index.html` and the three in each file under
+`/r/`. A quick find and replace on the origin does it. The QA suite checks that
+every stub agrees with the home page on one origin, but it cannot know whether
+that origin is the right one.
+
+`share-card.jpg` is the fallback card for the home page itself, built at
+1200x630 because X renders previews at 1.91:1 and would crop the 3:1 banner.
 
 The reveal and the journey review both credit PocketDragons.io and link to the
 official Hatchery at https://pocketdragons.io.
