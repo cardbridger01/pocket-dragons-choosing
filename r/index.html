@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pocket Dragons · The Choosing. Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<link rel="icon" href="data:,">
+<!-- EDIT ME if you move to a custom domain: the two absolute URLs below are what
+     X reads to build the link preview. Everything else works out of the box. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pocket Dragons · The Choosing">
+<meta property="og:title" content="Pocket Dragons · The Choosing">
+<meta property="og:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<meta property="og:url" content="https://pocket-dragons-choosing.onrender.com/">
+<meta property="og:image" content="https://pocket-dragons-choosing.onrender.com/share-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A torchlit chamber beneath the old keep, with a small dragon watching through a gap in the doors">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pocket Dragons · The Choosing">
+<meta name="twitter:description" content="Sixteen eggs are listening. Walk the keep and find out which one answers you.">
+<meta name="twitter:image" content="https://pocket-dragons-choosing.onrender.com/share-card.jpg">
+<title>Pocket Dragons · The Choosing</title>
+<style>
+:root{--ink:#f8edda;--muted:#b3adac;--gold:#f2b85c;--orange:#d86a27;--deep:#090e18;--panel:#121b2a;--line:#3f4150;--green:#9ee3ba}
+*{box-sizing:border-box}
+body{margin:0;background:#080d16;color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:0;background:#121b2a;border:1px solid var(--gold);padding:10px 14px;border-radius:7px;z-index:20}
+.skip:focus{left:12px;top:12px}
+.hero{min-height:210px;background:linear-gradient(90deg,#07101ed9,#07101e33),url('banner_2.png') center/cover;display:flex;align-items:end;padding:26px clamp(20px,5vw,80px);border-bottom:1px solid #765636;position:relative}
+.brand{font:700 11px system-ui;letter-spacing:4px;color:#ffca72;text-transform:uppercase}
+.hero h1{margin:3px 0 0;font:42px Georgia,serif;letter-spacing:2px}
+.hero p{margin:4px 0 0;color:#dfd8ca}
+.topbar{position:absolute;right:clamp(20px,5vw,80px);top:22px;display:flex;gap:9px;align-items:center}
+.badge{border:1px solid #846642;background:#0b131dcc;padding:7px 11px;border-radius:30px;font-size:11px;color:#f9d795}
+.ghost{background:#111b2a99;border:1px solid #667080;border-radius:7px;padding:8px 12px;font-size:12px}
+.ghost:hover{border-color:var(--gold)}
+main{max-width:1250px;margin:auto;padding:27px clamp(20px,5vw,70px) 50px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:20px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#efb85e;text-transform:uppercase}
+.intro{margin-bottom:18px}
+.intro h2{font:29px Georgia,serif;margin:3px 0}
+.intro p{color:var(--muted);margin:0;max-width:680px}
+.journey{background:linear-gradient(150deg,#1b2232,#101824);border:1px solid #3f4556;border-radius:13px;padding:26px;min-height:545px;box-shadow:0 22px 70px #0007}
+.meter{display:flex;align-items:center;gap:10px;margin-bottom:23px}
+.meterline{height:7px;background:#37404f;border-radius:10px;overflow:hidden;flex:1}
+.meterline i{display:block;height:100%;background:linear-gradient(90deg,#dd772f,#ffd27c);width:0;transition:width .35s}
+.meter small{color:#b8bec7;font-size:11px;white-space:nowrap}
+.scene{display:grid;grid-template-columns:1fr 145px;gap:23px;align-items:center}
+.scene h2{font:32px Georgia,serif;margin:5px 0 12px}
+.scene h2:focus{outline:none}
+.scene p{color:#c6c4c4;font-size:14px;line-height:1.7;margin:0 0 22px}
+.scene .quote{color:#ffd17d;font-family:Georgia,serif;font-size:17px;line-height:1.45;border-left:2px solid var(--gold);padding-left:14px;margin-bottom:22px}
+.visual{height:170px;border:1px solid #636073;border-radius:10px;overflow:hidden;background:#1b2535;box-shadow:0 10px 30px #0008}
+.visual img{width:100%;height:100%;object-fit:cover}
+.choices{display:grid;gap:10px}
+.choice{text-align:left;border:1px solid #4d5566;background:#1c2737;border-radius:8px;padding:13px 15px;transition:.17s}
+.choice:hover{border-color:var(--gold);background:#29384b;transform:translateX(3px)}
+.choice b{display:block;font-size:14px}
+.choice span{font-size:11px;color:#b3bac5}
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.card{background:#111a28;border:1px solid #303a4b;border-radius:11px;padding:17px}
+.card h3{font:20px Georgia,serif;margin:5px 0 10px}
+.card p{font-size:12px;color:var(--muted);margin:0}
+.eggmini{display:flex;align-items:center;gap:12px;border-top:1px solid #303a4b;margin-top:14px;padding-top:13px}
+.eggmini img{width:57px;height:70px;object-fit:cover;border-radius:8px}
+.eggmini b{font-size:13px}
+.eggmini small{display:block;color:#afb7c0;font-size:11px}
+.score-mask{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+.scores{display:grid;gap:8px;margin-top:13px}
+.score{display:grid;grid-template-columns:72px 1fr;gap:9px;align-items:center;font-size:10px}
+.score .line{height:5px;background:#303b49;border-radius:8px;overflow:hidden}
+.score i{display:block;height:100%;background:#e0a753;width:0;transition:.3s}
+.score.top span{color:#ffcf7e;font-weight:600}
+.score.top i{background:linear-gradient(90deg,#dd772f,#ffd27c)}
+.tip{color:#9da7b5!important;font-size:11px!important;margin-top:12px!important}
+.result{display:none}
+.result.show{display:block}
+.result h2{font:36px Georgia,serif;margin:5px 0 8px}
+.result h2:focus{outline:none}
+.result>p{color:#cad0d2;max-width:650px}
+.top-three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.eggcard{background:#202b3b;border:1px solid #4f5869;border-radius:9px;overflow:hidden;position:relative}
+.eggcard img{width:100%;aspect-ratio:.77;object-fit:cover;display:block}
+.eggcard div{padding:10px}
+.eggcard b{font:18px Georgia,serif}
+.eggcard small{display:block;color:#b5bdc6;margin-top:2px}
+.pct{position:absolute;right:9px;top:9px;background:#131b2aee;border:1px solid var(--gold);padding:5px 7px;border-radius:6px;color:#ffcf7e;font-weight:700}
+.review-list{display:grid;gap:8px;margin:20px 0}
+.review-row{display:grid;grid-template-columns:32px 1fr;gap:11px;align-items:center;background:#1b2737;border:1px solid #3c4a5a;border-radius:7px;padding:9px 11px}
+.review-row>span{font-size:11px;color:#efb85e}
+.review-row small{display:block;color:#a9b2bd;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.review-row b{display:block;color:#f4e5ca;font-size:13px;font-weight:500}
+.actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}
+.primary{background:linear-gradient(110deg,#e1a04b,#f4c771);color:#1c1820;border:0;border-radius:7px;padding:11px 17px;font-weight:700}
+.primary:hover{filter:brightness(1.1)}
+.share-card{text-align:center}
+.share-card .eyebrow{margin-bottom:9px}
+.share-card .share{width:100%;justify-content:center}
+.share-card p{margin:9px 0 0;font-size:11px;color:#8e97a3;line-height:1.5}
+.share{display:inline-flex;align-items:center;gap:8px;background:#e8e8ea;color:#15151a;border:0;border-radius:7px;padding:11px 16px;font-weight:700;text-decoration:none}
+.share:hover{background:#fff}
+.share svg{width:14px;height:14px;fill:currentColor}
+.official{margin:22px 0 0;padding-top:17px;border-top:1px solid #2e3849;color:#c3c9d2;font-size:13px;line-height:1.6}
+.official a{color:#ffcf7e}
+.official a:hover{color:#fff}
+.rights{margin:7px 0 0;color:#78818e;font-size:11px;line-height:1.55}
+.foot{margin-top:20px;color:#707a87;font-size:11px;text-align:center}
+.closeness{background:#1d2636;border-left:3px solid var(--gold);border-radius:0 7px 7px 0;padding:11px 14px;margin:0 0 18px;font-size:13px;color:#dcd6ca}
+.why{background:#151f2e;border:1px solid #34405260;border-radius:11px;padding:18px 20px;margin-top:4px}
+.why h3{font:22px Georgia,serif;margin:0 0 6px;color:#ffe2ae}
+.why>p{color:#aeb6c1;font-size:12.5px;margin:0 0 14px;max-width:640px}
+.trace{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trace-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;background:#1e2839;border:1px solid #3c4a5a;border-radius:7px;padding:9px 12px}
+.trace-amt{font:700 13px system-ui;color:#ffcf7e;text-align:center;background:#131b2a;border:1px solid #6d5734;border-radius:5px;padding:4px 0}
+.trace-row small{display:block;color:#9aa4b1;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.trace-row b{display:block;color:#f4e5ca;font-size:13px;font-weight:500}
+.trace-note{color:#8e97a3;font-size:11px;margin:12px 0 0;font-style:italic}
+.trace-row em.grew{display:block;font-style:normal;font-size:10.5px;color:#9fb0a4;margin-top:2px}
+.amp-line,.shared-line{color:#c9cfd7;font-size:12.5px;line-height:1.65;margin:13px 0 0}
+.amp-line b,.shared-line b{color:#ffcf7e}
+.score.faint{opacity:.42}
+.review-row{grid-template-columns:32px 1fr 46px}
+.review-row em{font-style:normal;text-align:right;font-size:12px;color:#7f8994}
+.review-row.fed em{color:#ffcf7e;font-weight:700}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.scene{grid-template-columns:1fr}.visual{height:125px;order:-1}.hero h1{font-size:32px}.topbar{top:12px}.badge{display:none}}
+@media(max-width:560px){.hero{min-height:190px;padding:20px}.hero h1{font-size:29px}.topbar{right:15px}.sidebar{display:block}.journey{padding:19px}.scene h2{font-size:27px}.top-three{gap:5px}.eggcard div{padding:7px}.eggcard b{font-size:14px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#play">Skip to the current choice</a>
+<header class="hero">
+  <div>
+    <div class="brand">Pocket Dragons · The Choosing</div>
+    <h1>What will wake inside you?</h1>
+    <p>You were given an egg. The egg has been listening.</p>
+  </div>
+  <div class="topbar">
+    <span class="badge">PRIVATE DISCOVERY · 01</span>
+    <button class="ghost" id="restart">Restart</button>
+  </div>
+</header>
+<main>
+  <div class="intro">
+    <div class="eyebrow">A hidden affinity journey</div>
+    <h2>Your egg is not random. It is responsive.</h2>
+    <p>Across the next scenes, your choices quietly shape a constellation of affinities. There are no correct answers. Follow instinct. At the end, you’ll see the three eggs that answer you most strongly.</p>
+  </div>
+  <div class="layout">
+    <section class="journey">
+      <div class="meter">
+        <small id="stepLabel">Choice 1</small>
+        <div class="meterline" role="progressbar" aria-labelledby="stepLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar"><i id="meter"></i></div>
+        <small id="percent">0%</small>
+      </div>
+      <div id="play" aria-live="polite"></div>
+      <div id="result" class="result" aria-live="polite"></div>
+    </section>
+    <aside class="sidebar">
+      <div class="card" id="eggCard">
+        <div class="eyebrow">Your unknown egg</div>
+        <h3 id="eggCardTitle">It has not chosen a name.</h3>
+        <p id="eggCardBody">Keep going. It is learning the shape of your attention.</p>
+        <div class="eggmini" id="eggmini"></div>
+      </div>
+      <div class="card share-card hidden" id="shareSlot"></div>
+      <div class="card">
+        <div class="eyebrow">Resonance</div>
+        <p class="score-mask" id="scoreMask">Your resonance is sealed.<br>Make your final choice to reveal the eggs listening most closely.</p>
+        <div class="scores hidden" id="scores"></div>
+        <p class="tip" id="tip">Your alignment stays concealed until the choosing is complete.</p>
+      </div>
+    </aside>
+  </div>
+  <div class="foot">Pocket Dragons prototype · Your choices are scored as a blend, so a close result can reveal a hybrid affinity.</div>
+</main>
+<script>
+
+/* ------------------------------------------------------------------
+   Pocket Dragons · The Choosing
+   Single-file prototype. No build step, no dependencies.
+   ------------------------------------------------------------------ */
+
+const types = {
+  '2face':   { name: '2Face',     img: '2face.webp',     tag: 'duality'    },
+  Acid:      { name: 'Acid',      img: 'Acid.webp',      tag: 'adaptation' },
+  Ghost:     { name: 'Ghost',     img: 'Ghost.webp',     tag: 'memory'     },
+  Ice:       { name: 'Ice',       img: 'Ice.webp',       tag: 'clarity'    },
+  Jelly:     { name: 'Jelly',     img: 'Jelly.webp',     tag: 'joy'        },
+  Lava:      { name: 'Lava',      img: 'Lava.webp',      tag: 'wildness'   },
+  Light:     { name: 'Light',     img: 'Light.webp',     tag: 'warmth'     },
+  Lightning: { name: 'Lightning', img: 'Lightning.webp', tag: 'instinct'   },
+  Panda:     { name: 'Panda',     img: 'Panda.webp',     tag: 'balance'    },
+  Pink:      { name: 'Pink',      img: 'Pink.webp',      tag: 'connection' },
+  Shadow:    { name: 'Shadow',    img: 'Shadow.webp',    tag: 'mystery'    },
+  Space:     { name: 'Space',     img: 'Space.webp',     tag: 'wonder'     },
+  Speed:     { name: 'Speed',     img: 'Speed.webp',     tag: 'momentum'   },
+  Tiger:     { name: 'Tiger',     img: 'Tiger.webp',     tag: 'courage'    },
+  Tree:      { name: 'Tree',      img: 'Tree.webp',      tag: 'patience'   },
+  Water:     { name: 'Water',     img: 'Water.webp',     tag: 'flow'       }
+};
+const keys = Object.keys(types);
+
+const scenes = {
+  start: {
+    eyebrow: 'The first door',
+    title: 'The chamber wakes.',
+    text: 'You come to in a round room beneath the old keep. Sixteen alcoves hold sleeping eggs, all covered by dust except yours. Somewhere beyond the sealed door, something small makes a hopeful sound.',
+    quote: '“Before you know what you are, decide what you notice.”',
+    img: 'banner_2.webp',
+    alt: 'A round stone chamber lined with sixteen alcoves of sleeping dragon eggs',
+    choices: [
+      ['Follow the sound', 'A tiny rhythm, patient and almost musical.', { Water: 5, Light: 3, Lightning: 1 }, 'sound'],
+      ['Study the eggs', 'The room is a puzzle before it is a threat.', { Shadow: 5, Space: 3, Ice: 1 }, 'eggs'],
+      ['Touch your own shell', 'Warmth answers warmth. Something answers back.', { Jelly: 5, "2face": 3, Pink: 1 }, 'shell']
+    ]
+  },
+  sound: {
+    eyebrow: 'A responsive path',
+    title: 'A light crosses the floor.',
+    text: 'A thread of color slips under the door: gold, blue, then violet. It pauses at your feet as though waiting for an instruction.',
+    quote: 'The egg grows warm against your palm.',
+    img: 'Pocket_Dragons_Egg_cracking.webp',
+    alt: 'A dragon egg with light beginning to seep through a crack in its shell',
+    choices: [
+      ['Open the door immediately', 'A signal is an invitation until proven otherwise.', { Lightning: 5, Speed: 3, Light: 1 }, 'archive'],
+      ['Block the light and listen', 'You want to understand the pattern first.', { Ghost: 5, Panda: 3, "2face": 1 }, 'keeper'],
+      ['Answer with your own light', 'You make a small, steady glow with the egg.', { Light: 5, Ghost: 3, Tiger: 1 }, 'hatch']
+    ]
+  },
+  eggs: {
+    eyebrow: 'A responsive path',
+    title: 'One alcove is breathing.',
+    text: 'The eggs are not identical. One carries frost beneath its shell, one has a soft gold pulse, and one is covered in marks that seem to move when you blink.',
+    quote: 'You realize the room has been sorting you too.',
+    img: 'Ice.webp',
+    alt: 'A pale blue egg rimed with frost inside a dim alcove',
+    choices: [
+      ['Choose the frost-marked alcove', 'Clarity feels kinder than certainty.', { Ice: 5, "2face": 3, Panda: 1 }, 'mirror'],
+      ['Choose the gold pulse', 'You reach for the warmth that reaches back.', { Light: 5, Pink: 3, Tiger: 1 }, 'garden'],
+      ['Choose the moving marks', 'A mystery is more alive than an answer.', { Ghost: 5, Acid: 3, Lava: 1 }, 'rift']
+    ]
+  },
+  shell: {
+    eyebrow: 'A responsive path',
+    title: 'Your egg answers pressure.',
+    text: 'When you touch your shell, a seam appears and closes again. It seems to be testing whether you will force it, soothe it, or wait.',
+    quote: '“The first bond is not ownership. It is attention.”',
+    img: 'Pocket_Dragons_Egg_cracking.webp',
+    alt: 'A dragon egg splitting along a thin seam of warm light',
+    choices: [
+      ['Tap a rhythm', 'You answer its almost-musical pulse.', { Water: 5, Lava: 3, Acid: 1 }, 'archive'],
+      ['Hold it still', 'You let the silence become a shelter.', { Tree: 5, Ghost: 3, Ice: 1 }, 'colossus'],
+      ['Press until it flashes', 'You want to see what it can do.', { Lightning: 5, Acid: 3, Lava: 1 }, 'storm']
+    ]
+  },
+  archive: {
+    eyebrow: 'The flooded archive',
+    title: 'The path becomes water.',
+    text: 'The next room is half-submerged. Shelves lean beneath the surface. A little paper dragon circles a locked chest, while a narrow dry ledge leads toward a distant bell.',
+    quote: '“Not every treasure wants to be carried out.”',
+    img: 'Water.webp',
+    alt: 'Deep water over sunken library shelves',
+    choices: [
+      ['Swim for the chest', 'The unknown is worth getting soaked for.', { Water: 5, Lava: 3, Lightning: 1 }, 'rift'],
+      ['Walk the ledge to the bell', 'A clear goal gives the fear somewhere to go.', { Speed: 5, Tiger: 3, Lightning: 1 }, 'storm'],
+      ['Help the paper dragon first', 'It is lost, and that matters more than the chest.', { Pink: 5, Tree: 3, Light: 1 }, 'keeper']
+    ]
+  },
+  mirror: {
+    eyebrow: 'The mirror garden',
+    title: 'Every reflection chooses a face.',
+    text: 'In a garden of black mirrors, your reflection keeps changing. One smiles. One hides. One wears a crown made of leaves. The egg remains still, watching you watch yourself.',
+    quote: '“A self is a room with more than one window.”',
+    img: '2face.webp',
+    alt: 'A two-faced dragon egg, one half bright and one half dark',
+    choices: [
+      ['Speak to the smiling one', 'You trust the self that reaches outward.', { Pink: 5, Light: 3, Tiger: 1 }, 'garden'],
+      ['Ask the hidden one what it knows', 'The parts you avoid may be carrying the key.', { Shadow: 5, "2face": 3, Panda: 1 }, 'rift'],
+      ['Break the mirrors', 'You refuse to be reduced to a reflection.', { Tiger: 5, Acid: 3, Lava: 1 }, 'storm']
+    ]
+  },
+  garden: {
+    eyebrow: 'The living gallery',
+    title: 'Something grows through the stone.',
+    text: 'Roots have split the floor. A tiny dragon made of leaves offers you a seed, then points at three impossible routes: a bright clearing, a dark burrow, and a high branch.',
+    quote: 'The seed is warm, but not yet yours.',
+    img: 'Tree.webp',
+    alt: 'A green dragon egg wrapped in roots and new leaves',
+    choices: [
+      ['Plant the seed here', 'A future deserves a place to begin.', { Tree: 5, Pink: 3, Acid: 1 }, 'colossus'],
+      ['Carry it into the bright clearing', 'You want growth where it can be witnessed.', { Light: 5, Acid: 3, Jelly: 1 }, 'hatch'],
+      ['Follow it into the dark burrow', 'Some roots only grow where no one applauds.', { Shadow: 5, Lava: 3, Tiger: 1 }, 'keeper']
+    ]
+  },
+  colossus: {
+    eyebrow: 'The sleeping colossus',
+    title: 'A giant blocks the road.',
+    text: 'An ancient dragon lies across the passage. Its scales are stone, its breath is wind, and one eye opens when you approach. It does not attack. It asks a question without words.',
+    quote: 'The egg vibrates with a low, thoughtful hum.',
+    img: '3D_Character_Sheet_Blinky.webp',
+    alt: 'Character studies of a small round dragon with large eyes',
+    choices: [
+      ['Wait beside it', 'Some doors open only when no one pushes.', { Tree: 5, Panda: 3, "2face": 1 }, 'rift'],
+      ['Climb over its back', 'The quickest path is also the strangest.', { Speed: 5, Acid: 3, Lava: 1 }, 'hatch'],
+      ['Offer it your food', 'You meet power with care instead of fear.', { Panda: 5, Pink: 3, Jelly: 1 }, 'keeper']
+    ]
+  },
+  storm: {
+    eyebrow: 'The storm stair',
+    title: 'The tower begins to fall.',
+    text: 'Stone drops from above. A stairway spirals toward a storm-lit hatch. Your egg flashes with a color you have not seen before, and three routes appear: up, across, or down.',
+    quote: '“Courage is not the absence of a route.”',
+    img: 'Lightning.webp',
+    alt: 'A dragon egg crackling with branching arcs of lightning',
+    choices: [
+      ['Run straight up', 'You commit before doubt can catch you.', { Lightning: 5, Acid: 3, Light: 1 }, 'hatch'],
+      ['Cross the broken bridge', 'You measure each step, then make the leap.', { Ice: 5, Ghost: 3, "2face": 1 }, 'rift'],
+      ['Descend toward the foundations', 'The safest answer may be the one nobody sees.', { Shadow: 5, Acid: 3, Speed: 1 }, 'keeper']
+    ]
+  },
+  keeper: {
+    eyebrow: 'The keeper’s test',
+    title: 'A little dragon is afraid.',
+    text: 'A pocket-sized dragon is trapped behind a translucent wall. It can escape if you leave it behind, or you can spend your last safe route opening the cage.',
+    quote: '“The thing you rescue changes what rescues you.”',
+    img: 'Ghost.webp',
+    alt: 'A pale translucent dragon egg with a faint inner glow',
+    choices: [
+      ['Break the wall for it', 'You accept the cost before asking who pays.', { Tiger: 5, Lightning: 3, Light: 1 }, 'feeling'],
+      ['Teach it the release pattern', 'A shared skill will outlast a single rescue.', { Ice: 5, Panda: 3, "2face": 1 }, 'feeling'],
+      ['Leave a trail of food', 'You cannot open every door, but you can make a path.', { Panda: 5, Acid: 3, Lava: 1 }, 'feeling']
+    ]
+  },
+  rift: {
+    eyebrow: 'The impossible rift',
+    title: 'The room folds around you.',
+    text: 'Gravity becomes a suggestion. A violet rift shows three memories: a place you miss, a version of yourself you abandoned, and a door that has never existed.',
+    quote: 'The egg floats toward the one you fear most.',
+    img: 'Space.webp',
+    alt: 'A dark dragon egg scattered with points of starlight',
+    choices: [
+      ['Enter the place you miss', 'Longing is a compass, even when it hurts.', { Water: 5, Ghost: 3, Ice: 1 }, 'feeling'],
+      ['Meet the abandoned self', 'You make room for a part you left behind.', { "2face": 5, Light: 3, Pink: 1 }, 'feeling'],
+      ['Step through the impossible door', 'Wonder is a form of courage.', { Space: 5, Lava: 3, Ice: 1 }, 'feeling']
+    ]
+  },
+  hatch: {
+    eyebrow: 'The open sky',
+    title: 'The ceiling becomes a horizon.',
+    text: 'The keep’s roof falls away, revealing a sky full of colored storms. Your egg rises to meet them. One current is gentle, one is wild, and one is impossibly fast.',
+    quote: '“You cannot keep every weather. Choose what you will become in.”',
+    img: 'Speed.webp',
+    alt: 'A streaked dragon egg that seems to be moving at speed',
+    choices: [
+      ['Follow the gentle current', 'You let the world carry you for a while.', { Water: 5, Acid: 3, Speed: 1 }, 'feeling'],
+      ['Dive into the wild current', 'A little danger makes the sky honest.', { Lava: 5, Speed: 3, Lightning: 1 }, 'feeling'],
+      ['Race the impossible current', 'You want to arrive before the question changes.', { Speed: 5, Acid: 3, Ghost: 1 }, 'feeling']
+    ]
+  },
+  feeling: {
+    eyebrow: 'The colorless room',
+    title: 'The egg asks for a feeling.',
+    text: 'All sound disappears. In the silence, your egg opens a tiny seam. You can pour one feeling into it: delight, anger, longing, or calm.',
+    quote: 'The shell does not judge what you choose. It remembers.',
+    img: 'Ghost.webp',
+    alt: 'A pale translucent dragon egg with a faint inner glow',
+    choices: [
+      ['Delight', 'Let the feeling become impossible to contain.', { Jelly: 5, Panda: 3, Light: 1 }, 'final'],
+      ['Anger', 'Give the fire a direction and a name.', { Tiger: 5, Lava: 3, Acid: 1 }, 'final'],
+      ['Longing', 'Make room for what has not arrived yet.', { Space: 5, "2face": 3, Ghost: 1 }, 'final'],
+      ['Calm', 'Hold steady until the feeling changes shape.', { Ghost: 5, Tree: 3, Panda: 1 }, 'final']
+    ]
+  },
+  final: {
+    eyebrow: 'The choosing',
+    title: 'The doors open at last.',
+    text: 'Sixteen colors bloom around the chamber. Your egg lifts out of your hands and waits there. It was never going to be one thing only. But something in it is singing louder than the rest.',
+    quote: '“Tell us what you carried here.”',
+    img: 'Pocket_Dragons_Egg_cracking.webp',
+    alt: 'A dragon egg breaking open along a widening crack',
+    choices: [
+      ['I carried curiosity', 'I followed the question wherever it led.', { Space: 3, Tiger: 1, Lava: 1 }, 'reveal'],
+      ['I carried connection', 'I kept looking for what needed me.', { Pink: 3, Light: 1, Tiger: 1 }, 'reveal'],
+      ['I carried freedom', 'I chose the door that felt most alive.', { Lava: 3, Tiger: 1, Acid: 1 }, 'reveal'],
+      ['I carried stillness', 'I listened until the world answered.', { Tree: 3, Space: 1, Jelly: 1 }, 'reveal']
+    ]
+  }
+};
+
+/* ---------- climax families -------------------------------------
+   The last two scenes do not add a fixed handful of points. They
+   AMPLIFY what the player has already gathered. "Tell us what you
+   carried here" should interpret the journey, not contribute to it.
+   Grouping is a fan reading, not official Pocket Dragons material. */
+const AMP = 1.5;
+const families = {
+  'Delight':  ['Jelly','Light','Pink','Water'],
+  'Anger':    ['Tiger','Lava','Acid','Lightning','Speed'],
+  'Longing':  ['Space','Ghost','Shadow','2face'],
+  'Calm':     ['Tree','Panda','Ice','Water'],
+  'curiosity':['Space','Ice','Ghost','Shadow','2face'],
+  'connection':['Pink','Light','Jelly','Panda'],
+  'freedom':  ['Lava','Speed','Lightning','Acid','Tiger'],
+  'stillness':['Tree','Water','Panda','Ghost']
+};
+const familyFor = label => {
+  const l = label.toLowerCase();
+  for (const k of Object.keys(families)) if (l.includes(k.toLowerCase())) return families[k];
+  return null;
+};
+
+/* ---------- progress model ---------------------------------------
+   Paths are 5-8 choices long, so a fixed denominator is always wrong.
+   remaining[] holds the fewest choices still needed from each scene;
+   progress = taken / (taken + remaining). Guaranteed monotonic, and
+   lands exactly on 100%.                                            */
+const remaining = (() => {
+  const r = {}; let changed = true;
+  while (changed) {
+    changed = false;
+    for (const [id, s] of Object.entries(scenes)) {
+      let best = Infinity;
+      for (const c of s.choices) {
+        const d = c[3] === 'reveal' ? 1 : (r[c[3]] === undefined ? Infinity : r[c[3]] + 1);
+        if (d < best) best = d;
+      }
+      if (best !== Infinity && r[id] !== best) { r[id] = best; changed = true; }
+    }
+  }
+  return r;
+})();
+
+/* ---------- state ------------------------------------------------
+   history[] carries, per choice, the points it put into each egg.
+   When a climax choice amplifies a family, every earlier contribution
+   to those eggs is scaled too, so a contribution always equals what
+   that choice is worth AT THE END. Sum of contributions == final
+   score, exactly, which is what lets the reveal show its work.      */
+let nodeId, step, history, amplifications;
+
+const $ = sel => document.querySelector(sel);
+const playEl = $('#play'), resultEl = $('#result'), eggminiEl = $('#eggmini');
+
+const EGG_CARD_PRISTINE = {
+  title: $('#eggCardTitle').textContent,
+  body:  $('#eggCardBody').textContent,
+  tip:   $('#tip').textContent,
+  mini:  '<img src="Pocket_Dragons_Egg_cracking.webp" alt="A dragon egg beginning to crack">' +
+         '<div><b>Unrevealed</b><small>Alignment forming</small></div>'
+};
+
+function totals() {
+  const t = {}; keys.forEach(k => t[k] = 0);
+  for (const h of history) for (const k of keys) t[k] += (h.gave[k] || 0);
+  return t;
+}
+
+function choose(weights, next, label, scene) {
+  const fam = (scene === 'feeling' || scene === 'final') ? familyFor(label) : null;
+  if (fam) {
+    let before = 0, after = 0;
+    for (const h of history) for (const k of fam) {
+      if (h.gave[k]) { before += h.gave[k]; h.gave[k] *= AMP; after += h.gave[k]; }
+    }
+    // `base` is deliberately left untouched. It records what the choice was
+    // worth when it was made, so the trace can show "5 grew to 7.5".
+    amplifications.push({ label, scene, family: fam.slice(), gained: after - before });
+  }
+  const gave = {}, base = {};
+  for (const [k, v] of Object.entries(weights)) { gave[k] = v; base[k] = v; }
+  history.push({ node: nodeId, label, gave, base, amplified: !!fam });
+  step++;
+  if (next === 'reveal') { reveal(); return; }
+  nodeId = next; render();
+}
+
+function ranking() {
+  const t = totals();
+  const total = keys.reduce((a, k) => a + t[k], 0) || 1;
+  return keys.map(k => ({ k, v: t[k], share: t[k] / total * 100 }))
+             .sort((a, b) => b.v - a.v || types[a.k].name.localeCompare(types[b.k].name));
+}
+
+/* Which choices built this egg, biggest first. */
+function traceFor(eggKey) {
+  return history
+    .map((h, i) => ({ i, label: h.label, node: h.node,
+                      amount: h.gave[eggKey] || 0, base: h.base[eggKey] || 0 }))
+    .filter(x => x.amount > 0)
+    .sort((a, b) => b.amount - a.amount);
+}
+/* Choices that fed both eggs, which is why a runner-up stayed close. */
+function sharedBetween(a, b) {
+  return history.filter(h => (h.gave[a] || 0) > 0 && (h.gave[b] || 0) > 0).map(h => h.label);
+}
+
+/* ---------- shared helpers ---------------------------------------- */
+function setProgress(pct, label) {
+  pct = Math.max(0, Math.min(100, Math.round(pct)));
+  $('#meter').style.width = pct + '%';
+  $('#percent').textContent = pct + '%';
+  $('#bar').setAttribute('aria-valuenow', pct);
+  $('#stepLabel').textContent = label;
+}
+function sealScores() {
+  $('#scoreMask').classList.remove('hidden');
+  $('#scores').classList.add('hidden');
+}
+function focusHeading(el) {
+  if (!el) return;
+  el.setAttribute('tabindex', '-1');
+  el.focus({ preventScroll: true });
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const numWord = n => ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'][n] || String(n);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------- flow --------------------------------------------------- */
+function reset() {
+  nodeId = 'start'; step = 0; history = []; amplifications = [];
+  resultEl.classList.remove('show');
+  resultEl.innerHTML = '';
+  sealScores();
+  $('#scores').innerHTML = '';
+  $('#eggCardTitle').textContent = EGG_CARD_PRISTINE.title;
+  $('#eggCardBody').textContent  = EGG_CARD_PRISTINE.body;
+  $('#tip').textContent = EGG_CARD_PRISTINE.tip;
+  eggminiEl.innerHTML = EGG_CARD_PRISTINE.mini;
+  $('#shareSlot').classList.add('hidden');
+  $('#shareSlot').innerHTML = '';
+  render();
+}
+
+function render() {
+  const s = scenes[nodeId];
+  sealScores();
+  const left = remaining[nodeId];
+  setProgress(step / (step + left) * 100,
+              left === 1 ? `Choice ${step + 1} · last one` : `Choice ${step + 1}`);
+
+  playEl.innerHTML =
+    '<div class="scene"><div>' +
+      '<div class="eyebrow">' + s.eyebrow + '</div>' +
+      '<h2>' + s.title + '</h2>' +
+      '<p>' + s.text + '</p>' +
+      '<div class="quote">' + s.quote + '</div>' +
+      '<div class="choices" role="group" aria-label="Choices for this scene">' +
+        s.choices.map((c, i) =>
+          '<button class="choice" data-i="' + i + '"><b>' + c[0] + '</b>' +
+          '<span>' + c[1] + '</span></button>').join('') +
+      '</div>' +
+    '</div><div class="visual"><img src="' + s.img + '" alt="' + s.alt + '"></div></div>';
+
+  const here = nodeId;
+  playEl.querySelectorAll('.choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = s.choices[+btn.dataset.i];
+      choose(c[2], c[3], c[0], here);
+    });
+  });
+  focusHeading(playEl.querySelector('h2'));
+}
+
+function reveal() {
+  const ranked = ranking();
+  const top = ranked.slice(0, 3);
+  const t3 = top.reduce((a, x) => a + x.v, 0) || 1;
+  top.forEach(x => x.blend = Math.round(x.v / t3 * 100));
+  // rounding guard so the three always read as exactly 100
+  const drift = 100 - top.reduce((a, x) => a + x.blend, 0);
+  top[0].blend += drift;
+
+  const win = top[0], runner = top[1];
+  /* Only flag a near-tie when the figures on screen cannot separate the two.
+     If the player can see 46% beat 39%, the win explains itself. Firing on a
+     raw-point threshold instead would banner a third of all playthroughs. */
+  const indistinguishable = win.v === runner.v || top[0].blend === top[1].blend;
+  const closeness = indistinguishable
+    ? `<p class="closeness">Two answered at once. Nothing in your path separates
+       <b>${types[win.k].name}</b> from <b>${types[runner.k].name}</b>, so the order above is only
+       alphabetical. Take them as a pair.</p>`
+    : '';
+
+  /* --- attribution: which choices actually built the winning egg --- */
+  const trace = traceFor(win.k);
+  const shown = trace.slice(0, 3);
+  const r1 = n => Math.round(n * 10) / 10;
+  const traceRows = shown.map(x =>
+    '<li class="trace-row"><span class="trace-amt">+' + r1(x.amount) + '</span>' +
+    '<div><small>' + esc(scenes[x.node].eyebrow) + '</small>' +
+    '<b>' + esc(x.label) + '</b>' +
+    (x.amount > x.base
+      ? '<em class="grew">was ' + r1(x.base) + '</em>'
+      : '') +
+    '</div></li>').join('');
+  const traceCovered = shown.reduce((a, x) => a + x.amount, 0);
+  const tracePct = Math.round(traceCovered / (win.v || 1) * 100);
+
+  /* --- the climax moment, if it moved the winner --- */
+  const amps = amplifications.filter(a => a.family.includes(win.k));
+  const plain = a => esc(a.label.replace(/^I carried /, '').toLowerCase());
+  const name = types[win.k].name;
+  let ampLine = '';
+  if (amps.length >= 2) {
+    ampLine = `<p class="amp-line">Twice you leaned the same way. <b>${cap(plain(amps[0]))}</b>, then
+      <b>${plain(amps[amps.length - 1])}</b>. Each time, whatever was already ${name} in you ran deeper.</p>`;
+  } else if (amps.length === 1) {
+    ampLine = amps[0].scene === 'feeling'
+      ? `<p class="amp-line">Then the egg asked for a feeling and you gave it <b>${plain(amps[0])}</b>.
+         Everything already leaning toward ${name} leaned harder.</p>`
+      : `<p class="amp-line">At the last door you named what you carried. <b>${cap(plain(amps[0]))}</b>.
+         Whatever was already ${name} in you ran deeper for it.</p>`;
+  }
+
+  const sharedLabels = sharedBetween(win.k, runner.k);
+  const sharedLine = sharedLabels.length
+    ? `<p class="shared-line"><b>${types[runner.k].name}</b> never fell far behind.
+       ${sharedLabels.length === 1
+          ? 'One moment fed them both:'
+          : numWord(sharedLabels.length) + ' of your moments fed them both, starting with'}
+       “${esc(sharedLabels[0])}.”</p>`
+    : '';
+
+  /* --- sidebar: the whole constellation, relative to your strongest --- */
+  $('#scoreMask').classList.add('hidden');
+  $('#scores').classList.remove('hidden');
+  const max = win.v || 1;
+  /* No figures here. The cards already carry the only percentages in the reveal,
+     on a different basis (share of your top three). Printing a second scale beside
+     them made the same egg read as two different numbers. The bar length alone
+     says what this panel is for: how near every other egg came. */
+  $('#scores').innerHTML = ranked.map((x, i) =>
+    '<div class="score' + (i < 3 ? ' top' : '') + (x.v === 0 ? ' faint' : '') + '">' +
+    '<span>' + types[x.k].name + '</span>' +
+    '<div class="line"><i style="width:' + Math.round(x.v / max * 100) + '%"></i></div>' +
+    '</div>').join('');
+
+  const slot = $('#shareSlot');
+  slot.classList.remove('hidden');
+  slot.innerHTML = '<div class="eyebrow">Tell someone</div>' + shareButton(top) +
+    '<p>The post names all three. The picture is ' + types[top[0].k].name + '.</p>';
+
+  setProgress(100, 'Affinity revealed');
+  $('#eggCardTitle').textContent = 'Resonance revealed.';
+  $('#eggCardBody').textContent  = 'Every egg that answered, set against the loudest of them.';
+  $('#tip').textContent = 'The three in gold are the ones above. The rest is how much of you went elsewhere.';
+  eggminiEl.innerHTML =
+    '<img src="' + types[win.k].img + '" alt="The ' + types[win.k].name + ' egg">' +
+    '<div><b>' + types[win.k].name + '</b><small>your strongest</small></div>';
+
+  playEl.innerHTML = '';
+  resultEl.classList.add('show');
+  resultEl.innerHTML =
+    '<div class="eyebrow">Your pocket dragon resonance</div>' +
+    '<h2>The shell knows your shape.</h2>' +
+    '<p>No one egg holds all of you. Three answered. This is how much of you went to each.</p>' +
+    '<div class="top-three">' + top.map((x, i) =>
+      '<article class="eggcard"><span class="pct">' + x.blend + '%</span>' +
+      '<img src="' + types[x.k].img + '" alt="The ' + types[x.k].name + ' egg">' +
+      '<div><b>' + (i + 1) + '. ' + types[x.k].name + '</b>' +
+      '<small>' + Math.round(x.v * 10) / 10 + ' resonance</small></div></article>').join('') +
+    '</div>' +
+    closeness +
+    '<section class="why"><h3>How ' + types[win.k].name + ' found you</h3>' +
+      '<p>' + (shown.length === 1
+        ? 'It came down to a single moment.'
+        : shown.length === 2
+          ? 'Two moments did most of the work.'
+          : 'You never chose it. You kept doing small things, and it kept answering.') + '</p>' +
+      '<ol class="trace">' + traceRows + '</ol>' +
+      '<p class="trace-note">Each figure counts what that moment was worth by the end. ' +
+      'Together, ' + tracePct + '% of your ' + types[win.k].name + '.</p>' +
+      ampLine + sharedLine +
+    '</section>' +
+    '<div class="actions">' +
+      '<button class="primary" id="again">Begin another choosing</button>' +
+      '<button class="ghost" id="showJourney">Review your journey</button>' +
+    '</div>' +
+    attribution();
+
+  $('#again').addEventListener('click', reset);
+  $('#showJourney').addEventListener('click', review);
+  focusHeading(resultEl.querySelector('h2'));
+}
+
+/* The crawler reads the absolute URL from the <meta> tags above; this is just
+   what gets appended to the tweet. Falls back to the canonical site when the
+   page is opened straight off disk, where location.origin is "null". */
+const SITE_URL = 'https://pocket-dragons-choosing.onrender.com/';
+const shareTarget = () =>
+  location.protocol === 'http:' || location.protocol === 'https:'
+    ? location.origin + location.pathname
+    : SITE_URL;
+
+function shareButton(top) {
+  const n = top.map(x => types[x.k].name);
+  /* X cannot take an image from a share button. The picture in a post comes from
+     the link preview, which X builds by crawling a URL in the post and reading its
+     static og:image. So each result gets its own tiny stub page under /r/, each
+     carrying its own egg card, and each bouncing a human straight back here.
+
+     Ordering matters: X builds the card from the FIRST link it finds, so our stub
+     has to appear before the pocketdragons.io mention or that one wins the preview.
+     The intent's own `url` parameter always lands last, after the text, which is
+     exactly the wrong place. So the link goes inline in the text instead and the
+     `url` parameter is left off entirely. */
+  const slug = types[top[0].k].name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const link = shareTarget().replace(/[^/]*$/, '') + 'r/' + slug + '.html';
+  const text = `Sixteen eggs were listening. Mine answered ${n[0]}, with ${n[1]} and ${n[2]} ` +
+               `close behind.\n\nWhich one answers you?\n${link}\n\n` +
+               `Don't have your official egg and keeper card yet? pocketdragons.io`;
+  const href = 'https://x.com/intent/post?text=' + encodeURIComponent(text);
+  return '<a class="share" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 1.2h3.7l-8.1 9.2 9.5 12.5h-7.4' +
+    'l-5.8-7.6-6.7 7.6H.4l8.6-9.8L0 1.2h7.6l5.2 6.9ZM17.6 20.7h2L6.5 3.2H4.3Z"/></svg>' +
+    'Share your result</a>';
+}
+
+function attribution() {
+  return '<p class="official">Haven\u2019t become a keeper and received your real egg yet? ' +
+    '<a href="https://pocketdragons.io" target="_blank" rel="noopener noreferrer">' +
+    'Sign up on the official page at pocketdragons.io</a></p>' +
+    '<p class="rights">All images property of PocketDragons.io. ' +
+    'The Choosing is a fan-made page and is not affiliated with or endorsed by Pocket Dragons.</p>';
+}
+
+function review() {
+  const win = ranking()[0].k;
+  playEl.innerHTML = '';
+  resultEl.classList.add('show');
+  $('#stepLabel').textContent = 'Journey reviewed';
+  resultEl.innerHTML =
+    '<div class="eyebrow">Your path through the keep</div>' +
+    '<h2>Every choice you carried.</h2>' +
+    '<p>Here is the path you walked. The marked steps are the ones ' + types[win].name +
+    ' heard. The rest were not wasted. They went to the other fifteen.</p>' +
+    '<div class="review-list">' + history.map((h, i) => {
+      const amt = h.gave[win] || 0;
+      return '<div class="review-row' + (amt > 0 ? ' fed' : '') + '">' +
+        '<span>' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<div><small>' + esc(scenes[h.node].eyebrow) + '</small><b>' + esc(h.label) + '</b></div>' +
+        '<em>' + (amt > 0 ? '+' + (Math.round(amt * 10) / 10) : '·') + '</em></div>';
+    }).join('') +
+    '</div>' +
+    '<div class="actions">' +
+      '<button class="primary" id="backReveal">Return to affinity reveal</button>' +
+      '<button class="ghost" id="againFromReview">Begin another choosing</button>' +
+    '</div>' +
+    attribution();
+  $('#backReveal').addEventListener('click', reveal);
+  $('#againFromReview').addEventListener('click', reset);
+  focusHeading(resultEl.querySelector('h2'));
+}
+
+$('#restart').addEventListener('click', () => {
+  if (step === 0 || confirm('Restart the choosing? Your current affinity journey will be cleared.')) reset();
+});
+
+reset();
+</script>
+</body>
+</html>
